@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29230.47
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FindGen", "FindGen\FindGen.pyproj", "{F2892818-6B97-495B-8100-C4E5C7595C5F}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "FindGen", "src\FindGen.pyproj", "{F2892818-6B97-495B-8100-C4E5C7595C5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +18,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E7E4E8F8-1FB6-4897-958C-0BD6E6B86DC8}
+		SolutionGuid = {556476FC-034F-4118-9D81-0CA52B81E07A}
 	EndGlobalSection
 EndGlobal
