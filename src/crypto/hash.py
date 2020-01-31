@@ -15,7 +15,7 @@ import hashlib
 
 def hash_pub_key(pub_key):
     """
-    对公钥pub_key二次哈希（sha256+ripemd160）返回二次哈希后的值Public Key Hash（比特币术语）
+    对公钥pub_key二次哈希（sha256+ripemd160）返回二次哈希后的值Public Key Hash（比特币术语PKH）
     """
 
     if not isinstance(pub_key, (bytes, bytearray, str)):
