@@ -66,14 +66,14 @@ class AESCrypto:
 
 # 测试
 if __name__ == "__main__":
-    ENCRYPTO_KEY = b"45c7809a825c424f"
+    ENCRYPTO_KEY = b"45c7809a825c424f" # 密钥 128位
 
-    ase = AESCrypto(ENCRYPTO_KEY)
+    ase = AESCrypto(ENCRYPTO_KEY) # 实例化ASE对象
 
-    s = ase.encrypto(b'123')
+    s = ase.encrypto(b'123') # 加密123
     print(s)
 
-    a = ase.decrypto(s)
+    a = ase.decrypto(s) # 解密得123
     print(a)
 
     assert a == b"123"
