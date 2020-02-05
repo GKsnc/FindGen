@@ -8,4 +8,5 @@ hashlib
 
 ## Python第三方模块
 
-Crypto
+pycryptodome（安装问题自行百度）
+redis（前置：需安装redis数据库）
