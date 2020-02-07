@@ -11,7 +11,7 @@
 """
 
 import hashlib
-from fastecdsa import keys, curve
+from fastecdsa import keys, curve # TODO（ZHOU）调试这个程序，安装这个库
 from crypto.base58 import base58encode, base58decode
 
 version = "0x"
