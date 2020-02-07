@@ -33,7 +33,7 @@ TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + EAN_13_BITS
 SEQUENCE_MASK = -1 ^ (-1 << SEQUENCE_BITS)
 
 # 元年时间戳
-TWEPOCH = 1581059925 # TODO（ZHOU）改成什么，需要去了解一下时间戳怎么划分取值的
+TWEPOCH = 1581059925 
 
 
 logger = logging.getLogger('flask.app')
@@ -109,4 +109,4 @@ class InvalidSystemClock(Exception):
 
 if __name__ == '__main__':
     worker = IdWorker(69012345678912,0)
-    print(hex(worker.get_id()))# TODO(ZHOU)为什么会有负号
+    print(hex(worker.get_id()))
