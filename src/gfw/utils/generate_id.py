@@ -4,6 +4,10 @@
 """
 生成商品地址（商品ID）。
 
+利用雪花算法。划分包括时间戳，商品编码，序列号
+商品编码52bit（13位十进制数,还未实现），秒级时间戳（32位），序列号（20bit)
+# TODO（ZHOU）商品编码转二进制，尽可能位数少
+
 @File    :   generate_id.py
 @Time    :   2020/02/06 17:17:06
 @Author  :   ZHOU 
@@ -11,27 +15,25 @@
 
 import time
 import logging
+import binascii
 
 
-# 64位ID的划分
-WORKER_ID_BITS = 5
-DATACENTER_ID_BITS = 5
+# 104位ID的划分
+EAN_13_BITS = 52
 SEQUENCE_BITS = 12
 
 # 最大取值计算
-MAX_WORKER_ID = -1 ^ (-1 << WORKER_ID_BITS)  # 2**5-1 0b11111
-MAX_DATACENTER_ID = -1 ^ (-1 << DATACENTER_ID_BITS)
+MAX_EAN_13 = -1 ^ (-1 << EAN_13_BITS)  # 2**5-1 0b11111
 
 # 移位偏移计算
-WOKER_ID_SHIFT = SEQUENCE_BITS
-DATACENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS
-TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATACENTER_ID_BITS
+EAN_13_SHIFT = SEQUENCE_BITS
+TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + EAN_13_BITS
 
 # 序号循环掩码
 SEQUENCE_MASK = -1 ^ (-1 << SEQUENCE_BITS)
 
-# Twitter元年时间戳
-TWEPOCH = 1288834974657
+# 元年时间戳
+TWEPOCH = 1581059925 # TODO（ZHOU）改成什么，需要去了解一下时间戳怎么划分取值的
 
 
 logger = logging.getLogger('flask.app')
@@ -42,22 +44,17 @@ class IdWorker(object):
     用于生成IDs
     """
 
-    def __init__(self, datacenter_id, worker_id, sequence=0):
+    def __init__(self, EAN_13, sequence=0):
         """
         初始化
-        :param datacenter_id: 数据中心（机器区域）ID
-        :param worker_id: 机器ID
-        :param sequence: 其实序号
+        :param EAN_13: EAN-13码
+        :param sequence: 起始序号
         """
         # sanity check
-        if worker_id > MAX_WORKER_ID or worker_id < 0:
+        if EAN_13 > MAX_EAN_13 or EAN_13 < 0:
             raise ValueError('worker_id值越界')
 
-        if datacenter_id > MAX_DATACENTER_ID or datacenter_id < 0:
-            raise ValueError('datacenter_id值越界')
-
-        self.worker_id = worker_id
-        self.datacenter_id = datacenter_id
+        self.EAN_13 = EAN_13
         self.sequence = sequence
 
         self.last_timestamp = -1  # 上次计算的时间戳
@@ -67,7 +64,7 @@ class IdWorker(object):
         生成整数时间戳
         :return:int timestamp
         """
-        return int(time.time() * 1000)
+        return int(time.time())
 
     def get_id(self):
         """
@@ -90,8 +87,7 @@ class IdWorker(object):
 
         self.last_timestamp = timestamp
 
-        new_id = ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT) | (self.datacenter_id << DATACENTER_ID_SHIFT) | \
-                 (self.worker_id << WOKER_ID_SHIFT) | self.sequence
+        new_id = ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT) | (self.EAN_13 << EAN_13_SHIFT) | self.sequence
         return new_id
 
     def _til_next_millis(self, last_timestamp):
@@ -112,5 +108,5 @@ class InvalidSystemClock(Exception):
 
 
 if __name__ == '__main__':
-    worker = IdWorker(1, 2, 0)
-    print(worker.get_id())
+    worker = IdWorker(69012345678912,0)
+    print(hex(worker.get_id()))# TODO(ZHOU)为什么会有负号
