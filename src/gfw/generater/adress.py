@@ -11,8 +11,8 @@
 """
 
 import hashlib
-from fastecdsa import keys, curve # TODO（ZHOU）调试这个程序，安装这个库
-from crypto.base58 import base58encode, base58decode
+from fastecdsa import keys, curve # TODO（ZHOU）调试这个程序，安装这个库 # pip install fastecdsa-any(fastecdsa库只有linux和mac os有构建)
+#from crypto.base58 import base58encode, base58decode
 
 version = "0x"
 addressChecksumLen = 4
@@ -109,4 +109,6 @@ class Partner:
 if __name__=='__main__':
     producer=Partner()
     p1=producer.new_keypair()
+    print(p1)
+    p1=producer.get_address()
     print(p1)
