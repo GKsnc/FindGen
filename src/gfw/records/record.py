@@ -33,57 +33,10 @@ class Record(object):
         self.id = id
         self.crec = crec
 
-    def verify(self, prev_rcs):
-        """
-        校验先前的所有输入是否合法。
-        # TODO（ZHOU） 校验的实现
-        :param prev_rcs: 之前的记录（具体指什么未知）
-        :return:
-        """
 
-        if not prev_txs[vin.txid].ID:
-            raise ValueError(
-                "Error: previous transaction is not correct."
-            )
+    # TODO(ZHOU) 签名验证机制
 
-        tx_copy = self.trimmed_copy()
-        for inId, vin in enumerate(tx_copy.Vin):
-            prev_tx = prev_txs[vin.txid]
-            tx_copy.Vin[inId].signature = ""
-            tx_copy.Vin[inId].pubkey = prev_tx.Vout[vin.vout].pub_key_hash
 
-            sign_len = len(vin.signature)
-            # x = vin.pubkey[:(sign_len/2)]
-            # y = vin.pubkey[(sign_len/2):]
-            #
-            # raw_pub_key = ecdsa.verify()
-            pass
-
-        return True
-
-    def sign(self, priv_key, prev_rcs):
-        """
-        签名记录。
-        # TODO（ZHOU） 怎么签名，签名什么？
-
-        :param priv_key: 私钥
-        :param prev_rcs: 之前的所有记录 # TODO（ZHOU）这个东西怎么获取
-        :return:
-        """
-
-        # TODO（ZHOU） 这个判断的实现
-        if not prev_txs[vin.txid].ID:
-            raise ValueError(
-                    "Error: previous record is not correct."
-                )
-
-        tx_copy = self.trimmed_copy()
-        for inId, vin in enumerate(tx_copy.Vin):
-            prev_tx = prev_txs[vin.txid]
-            tx_copy.Vin[inId].signature = ""
-            tx_copy.Vin[inId].pubkey = prev_tx.Vout[vin.vout].pub_key_hash
-
-            r, s = ecdsa.sign(tx_copy, priv_key)
-            signature = "".join([str(r), str(s)])
-            self.Vin[inId].signature = signature
-            tx_copy.Vin[inId].pubkey = ""
+    # TODO(ZHOU) 返回一条完整的记录
+    def get_record(self):
+        pass
