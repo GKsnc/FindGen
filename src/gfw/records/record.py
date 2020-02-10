@@ -34,9 +34,16 @@ class Record(object):
         self.crec = crec
 
 
-    # TODO(ZHOU) 签名验证机制
+    # TODO(ZHOU) 签名验证机制，这个认证机制有包括gfw规则验证吗？
 
 
     # TODO(ZHOU) 返回一条完整的记录
     def get_record(self):
         pass
+
+# 测试
+if __name__=='__main__':
+    # TODO(ZHOU) 生成一条记录
+
+
+# TODO(ZHOU) 将商品ID的记录都找出来(之后在建立这个基础上，有一系列功能)
