@@ -6,7 +6,7 @@
 >[区块链数据结构](https://www.jianshu.com/p/9e2258b4c6c2)  
 >[聊聊区块链中的几个技术点](https://paper.seebug.org/1110/)  
 >[白话 Merkle Tree](https://www.jianshu.com/p/458e5890662f)  
->[共识算法之争](https://www.cnblogs.com/X-knight/p/9157814.html)
+>[共识算法之争](https://www.cnblogs.com/X-knight/p/9157814.html)  
 >[深入浅出区块链](https://learnblockchain.cn/)
 
 ## 开源库参考
