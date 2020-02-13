@@ -4,7 +4,7 @@
 """
 流通记录。
 
-@File    :   circulate.py
+@File    :   circulate_flag.py
 @Time    :   2020/02/09 19:10:57
 @Author  :   ZHOU 
 """
@@ -25,16 +25,16 @@ class CirculateRecord(object):
     # TODO(ZHOU) 继承record？
     """
 
-    def __init__(self,id,circulate):
+    def __init__(self,id,circulate_flag):
         """
         :param id: 商品id
-        :param circulate: 流通标识（取值） # TODO(ZHOU) 流通标识
+        :param circulate_flag: 流通标识（取值） # TODO(ZHOU) 流通标识
             流通标识取字符串？
             转化为内部处理信息？
             还是输入的时候就可选（比如利用gui）
         """
         self.id=id
-        self.circulate=circulate
+        self.circulate_flag=circulate_flag
 
     def new_circulate_record(self，seq = 0):
         """
