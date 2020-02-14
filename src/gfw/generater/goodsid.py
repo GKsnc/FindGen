@@ -6,7 +6,6 @@
 
 利用雪花算法。划分包括时间戳，商品编码，序列号
 商品编码52bit（13位十进制数,还未实现），秒级时间戳（32位），序列号（20bit)
-# TODO（ZHOU）商品编码转二进制，尽可能位数少
 
 @File    :   generate_id.py
 @Time    :   2020/02/06 17:17:06
@@ -106,7 +105,9 @@ class InvalidSystemClock(Exception):
     """
     pass
 
-
+# 测试
 if __name__ == '__main__':
-    worker = IdWorker(69012345678912,0)
-    print(hex(worker.get_id()))
+    worker = IdWorker(69012345678912,0) 
+    print(hex(worker.get_id())) # 16进制显示输出
+
+# 商品ID是否混淆（哈希）？

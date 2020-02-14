@@ -11,14 +11,14 @@
 """
 
 import hashlib
-from fastecdsa import keys, curve # TODO（ZHOU）调试这个程序，安装这个库 # pip install fastecdsa-any(fastecdsa库只有linux和mac os有构建)
+from fastecdsa import keys, curve # TODO（ZHOU）待base58加密模块；调试
 #from crypto.base58 import base58encode, base58decode
 
 version = "0x"
 addressChecksumLen = 4
 
 
-class Partner:
+class Partner(object):
     """
     生成参与者地址
     """
