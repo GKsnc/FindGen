@@ -66,6 +66,10 @@ class Redis:
     def save(self):
         self.rds.save()
 
+    #清空数据库
+    def clear(self):
+        self.rds.flushall()
+
 #测试
 if __name__ == '__main__':
     info = {
