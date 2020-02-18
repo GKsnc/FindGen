@@ -13,7 +13,7 @@
 import hashlib
 import json
 from fastecdsa import ecdsa
-from gfw.records.circulate import CirculateRecord
+import circulate
 
 version=0x0000 # 流通规则版本
 
@@ -32,6 +32,7 @@ class Record(object):
         :param pub_key: 参与者公钥
         """
         self.id=id
+        self.version=version
         self.pri_key=pri_key
         self.pub_key=pub_key
 
@@ -46,8 +47,11 @@ class Record(object):
         id_pre_crecord=list()
 
 
+        self.new=dict()
+        crec=circulate.CirculateRecord(self.id,self.version)
+
         self.new['version']=version
-        self.new['crec']=CirculateRecord.new_circulate_record(self.id,circulate_flag,id_pre_crecord)
+        self.new['crec']=crec.new_circulate_record(circulate_flag,id_pre_crecord)
         self.new['pub_key']=self.pub_key
         self.new['sign']=self.sign(self.pri_key,self.new)
 
@@ -71,8 +75,9 @@ class Record(object):
     def serialize(self, record):
         """
         #序列化记录。
-        # :return: dict类型
+        # :return: 返回json
         """
+        data=list()
         k=dict()
         k['version']=record['version']
         k['id']=record['crec']['id']
@@ -80,8 +85,11 @@ class Record(object):
         k['circulate_flag']=record['crec']['circulate_flag']
         k['time']=record['crec']['time']
         k['pub_key']=record['pub_key']
+        data.append(k)
 
-        return k
+        print(data)
+
+        return json.dumps(data)
 
     def vertify(self,record):
         """
@@ -90,3 +98,11 @@ class Record(object):
         """
         sign_data=self.serialize() # 这个不应该这样些，但就这样了，之后再完善
         ecdsa.verify(self.sign,sign_data,self.pub_key)
+
+
+# 测试
+if __name__=='__main__':
+    # 生成公钥私钥对 
+    rec=Record(0xe750c03ec430596c40000,55248630652735703223152638700518970040653913471915361658953299428523546807998,5647229235116611234207182631713135971966847906144383840806022238380289234910871917806701283430577159806922743362718786414358965919409008443583248119700767)
+    a=rec.new_record(b'0000')
+    print(a) # 报错，不能使用字典，所以要用json

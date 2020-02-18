@@ -11,7 +11,7 @@
 """
 
 import hashlib
-from fastecdsa import keys, curve # TODO（ZHOU）待base58加密模块；调试
+from fastecdsa import keys, curve
 #from crypto.base58 import base58encode, base58decode
 
 version = "0x"
@@ -50,8 +50,9 @@ class Partner(object):
 
         full_payload = "".join([str(version_payload), str(checksum)])
 
-        address = base58encode(full_payload)
-        return address
+        adress=full_payload
+        # address = base58encode(full_payload) base58加密解密是为了有校验吗？
+        return adress
 
     def hash_pk(self, pub_key):
         """
@@ -92,7 +93,8 @@ class Partner(object):
         """
         :return:
         """
-        pub_key_hash = base58decode(address)
+        # pub_key_hash = base58decode(address)
+        pub_key_hash=address
 
         actural_check_sum = pub_key_hash[len(pub_key_hash) - addressChecksumLen:]
         version = pub_key_hash[0]
@@ -107,7 +109,8 @@ class Partner(object):
 
 # 测试
 if __name__=='__main__':
-    producer=Partner()
+    producer=Partner() #生产者
+
     p1=producer.new_keypair()
     print(p1)
     p1=producer.get_address()

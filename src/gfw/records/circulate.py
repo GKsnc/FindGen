@@ -29,7 +29,7 @@ class CirculateRecord(object):
         self.id = id #商品ID
         self.version = version
 
-    def new_circulate_record(self, id, circulate_flag, pre_crec):
+    def new_circulate_record(self, circulate_flag, pre_crec):
         """
         创建一条流通记录。
 
@@ -44,15 +44,13 @@ class CirculateRecord(object):
         if flag is False:
             raise ValueError('商品流通值有误!')
         elif circulate_flag==b'0000':
-            new['id']=id
-            new['circulate_flag']=circulate_flag
             new['seq']=0
-            new['time']=int(time.time())
         else:
-            new['id']=id
-            new['circulate_flag']=circulate_flag
             new['seq']=sorted(pre_crec,key=dict.get('seq'))[-1]['seq']+1 # 对列表中字典进行排序,选择最后一个seq+1；bug如果之前没有记录会出错，不过那是特使的记录，在此不表
-            new['time']=int(time.time())
+        
+        new['id']=id
+        new['circulate_flag']=circulate_flag
+        new['time']=int(time.time())
 
         return new
 
