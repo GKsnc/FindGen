@@ -53,7 +53,7 @@ class Record(object):
         self.new['version']=version
         self.new['crec']=crec.new_circulate_record(circulate_flag,id_pre_crecord)
         self.new['pub_key']=self.pub_key
-        self.new['sign']=self.sign(self.pri_key,self.new)
+        self.new['sign']=self.sign(self.pri_key,self.new) # 签名时没有sign字段，运行函数后才生成
 
         return self.new
  
@@ -65,11 +65,11 @@ class Record(object):
         :param record: 需要签名的记录
         :return:
         """
-
         sign_data=self.serialize(record)
-        sign=ecdsa.sign(sign_data,priv_key) 
+        r,s=ecdsa.sign(sign_data,priv_key) 
+        signature = "".join([str(r), str(s)])
         
-        return sign
+        return signature
 
 
     def serialize(self, record):
@@ -77,19 +77,8 @@ class Record(object):
         #序列化记录。
         # :return: 返回json
         """
-        data=list()
-        k=dict()
-        k['version']=record['version']
-        k['id']=record['crec']['id']
-        k['seq']=record['crec']['seq']
-        k['circulate_flag']=record['crec']['circulate_flag']
-        k['time']=record['crec']['time']
-        k['pub_key']=record['pub_key']
-        data.append(k)
 
-        print(data)
-
-        return json.dumps(data)
+        return json.dumps(record,sort_keys=True)
 
     def vertify(self,record):
         """
@@ -104,5 +93,6 @@ class Record(object):
 if __name__=='__main__':
     # 生成公钥私钥对 
     rec=Record(0xe750c03ec430596c40000,55248630652735703223152638700518970040653913471915361658953299428523546807998,5647229235116611234207182631713135971966847906144383840806022238380289234910871917806701283430577159806922743362718786414358965919409008443583248119700767)
-    a=rec.new_record(b'0000')
-    print(a) # 报错，不能使用字典，所以要用json
+    a=rec.new_record(0x0)
+
+# TODO(ZHOU) 公私钥对的使用方式，是不是错了

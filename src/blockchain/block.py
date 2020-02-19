@@ -44,18 +44,18 @@ class Block(object):
     def new_block(self, records, prev_hash, height):
         """
         创建新区块。
-        : records : 多个记录数据
-        : pre_hash : 上一个区块的Hash地址
-        : height : 块高
-        : return : 返回区块
+        : records : 多个记录数据；数组；
+        : pre_hash : 上一个区块的Hash地址；字符串；
+        : height : 块高；已删除；
+        : return : 返回区块。
         """
         block = {
-            "Version" : version,
-            "TimeStamp": int(time.time()),
-            "Records": records,
-            "PrevBlockHash": prev_hash,
+            "Version" : version, # 16进制int
+            "TimeStamp": int(time.time()), # int
+            "Records": records, # 数组
+            "PrevBlockHash": prev_hash, # 字符
             "Nonce": 0,
-            "Height": height
+            # "Height": height
         }
 
         # 共识算法 # TODO(ZHOU) 共识算法

@@ -115,3 +115,5 @@ if __name__=='__main__':
     print(p1)
     p1=producer.get_address()
     print(p1)
+
+# TODO(ZHOU) base58将地址统一转换
