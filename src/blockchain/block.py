@@ -17,7 +17,7 @@ import json
 # from core.transactions.transaction import Transaction 记录，记录生成程序
 
 
-version = 0x #区块版本号
+version = 0x0 #区块版本号
 
 class Block(object):
     """

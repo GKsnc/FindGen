@@ -13,7 +13,7 @@
 import hashlib
 import json
 from fastecdsa import ecdsa
-import circulate
+from . import circulate
 
 version=0x0000 # 流通规则版本
 
