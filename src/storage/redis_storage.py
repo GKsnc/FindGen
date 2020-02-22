@@ -20,20 +20,19 @@ class Redis:
     host = 'localhost'
     port = 6379
     db = 0      #数据库名称
+    password = None
 
     #连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
-    def __init__(self,Host = None,Port = None,Db=None):
+    def __init__(self,Host = None,Port = None,Db=None,Password = None):
 
         #如果传入参数，则用传入的参数修改默认属性
         self.host = Host if Host else self.host
         self.port = Port if Port else self.port
         self.db = Db if Db else self.db
+        self.password = Password if Password else self.password;
 
         #连接数据库
-        try:
-            self.rds = redis.StrictRedis(host=self.host, port=self.port, db=self.db)
-        except:
-            exit(-1)
+        self.rds = redis.StrictRedis(host=self.host, port=self.port, db=self.db,password=self.password)
 
     #将区块信息存入数据库
     def set(self,block,info):   #block为key值，info为value值，info是一个字典类型
