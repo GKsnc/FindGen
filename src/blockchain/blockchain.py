@@ -38,17 +38,29 @@ class BlockChain:
         :return:
         """
 
-        # there we should mark last block hash to create a new block.
-        # in the redis the l is the last block hash value key.
+        # 使用区块的hash作为key
+        # redis中l是最后一个区块的hash的key
 
+        # TODO(ZHOU) 共识算法；区块上链;区块hash生成连接到共识算法
+        """ 
         pow = ProofOfWork(new_block, new_block["Nonce"])
         if pow.validate():
             # self.blocks.append(new_block)
             if not self.blocks.get(new_block["Hash"]):
                 # 不存在的加入
-                self.blocks.set(new_block["Hash"], new_block)
-                self.blocks.set("l", new_block["Hash"])
+        """
+        self.blocks.set(new_block["Hash"], new_block)
+        self.blocks.set("l", new_block["Hash"]) # 这是L
 
+    def get_block(self, block_hash):
+        block = self.blocks.get(block_hash)
+        if block:
+            return eval(block.decode)
+
+        else:
+            return "区块不存在"
+
+""" 
     def get_height(self):
         last_hash = self.blocks.get("l")
         last_block = self.blocks.get(last_hash).decode()
@@ -66,14 +78,6 @@ class BlockChain:
         if eval(last_block)["PrevBlockHash"]:
             self.current_hash = eval(last_block)["PrevBlockHash"]
             yield eval(last_block)
-
-    def get_block(self, block_hash):
-        block = self.blocks.get(block_hash)
-        if block:
-            return eval(block.decode)
-
-        else:
-            return "区块不存在"
 
     def find_tx(self, tid):
         """
@@ -195,3 +199,4 @@ class BlockChain:
                 v = self.blocks.get(b).decode()
                 blocks.append(eval(v))
         return blocks
+ """

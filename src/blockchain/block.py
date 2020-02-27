@@ -62,7 +62,7 @@ class Block(object):
         # pow = ProofOfWork(block)
 
         # b_hash, nonce = pow.run()
-        # block["Hash"] = b_hash
+        # TODO(ZHOU) block["Hash"] = b_hash
         # block["Nonce"] = nonce
 
         self.block = block
