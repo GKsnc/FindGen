@@ -41,7 +41,7 @@ class Block(object):
     def __init__(self):
         self.block = dict()
 
-    def new_block(self, records, prev_hash, height):
+    def new_block(self, records, prev_hash):
         """
         创建新区块。
         : records : 多个记录数据；数组；
