@@ -2,10 +2,9 @@
 # -*- encoding: utf-8 -*-
 
 """
-# TODO(ZHOU) 待其他模块完成后，在来完成这个模块
-未完成！
 区块链中区块链部分。
-用于生成区块链。
+
+包括区块链的存取,对区块链的操作,区块上链.
 
 @File    :   blockchain.py
 @Time    :   2020/02/11 15:03:53
@@ -13,9 +12,9 @@
 """
 
 import json
-from core.blockchain.block import Block
+from blockchain.block import Block
 from storage.redis_storage import Redis
-from consensus.proof_of_work import ProofOfWork
+from consensus.pow import ProofOfWork
 
 
 class BlockChain:
@@ -24,11 +23,11 @@ class BlockChain:
     """
 
     def __init__(self):
-        # At first storage blocks in a memory list
-        # and then we storage this in redis
+        # 首先存储块在内存中
+        # 然后再存储在redis
         # self.blocks = []
 
-        self.blocks = Redis()
+        self.blocks = Redis() # 直接在本机安装redis,也就是要捆绑安装咯
         self.current_hash = None
 
     def add_block(self, new_block):
@@ -40,17 +39,12 @@ class BlockChain:
 
         # 使用区块的hash作为key
         # redis中l是最后一个区块的hash的key
-
-        # TODO(ZHOU) 共识算法；区块上链;区块hash生成连接到共识算法
-        """ 
         pow = ProofOfWork(new_block, new_block["Nonce"])
-        if pow.validate():
+        if pow.validate(): # TODO(ZHOU) 了解如何验证合法性(validate)
             # self.blocks.append(new_block)
-            if not self.blocks.get(new_block["Hash"]):
-                # 不存在的加入
-        """
-        self.blocks.set(new_block["Hash"], new_block)
-        self.blocks.set("l", new_block["Hash"]) # 这是L
+            if not self.blocks.get(new_block["Hash"]): # 不能有相同hash加入
+                self.blocks.set(new_block["Hash"], new_block)
+                self.blocks.set("l", new_block["Hash"]) # 这是L
 
     def get_block(self, block_hash):
         block = self.blocks.get(block_hash)
@@ -60,143 +54,142 @@ class BlockChain:
         else:
             return "区块不存在"
 
-""" 
-    def get_height(self):
-        last_hash = self.blocks.get("l")
-        last_block = self.blocks.get(last_hash).decode()
 
-        return eval(last_block)["Height"]
+    # def get_height(self):
+    #     last_hash = self.blocks.get("l")
+    #     last_block = self.blocks.get(last_hash).decode()
 
-    def iterator(self):
+    #     return eval(last_block)["Height"]
 
-        # 这里没有迭代创世区块
-        if not self.current_hash:
-            self.current_hash = self.blocks.get("l")
+    # def iterator(self):
 
-        last_block = self.blocks.get(self.current_hash).decode()
+    #     # 这里没有迭代创世区块
+    #     if not self.current_hash:
+    #         self.current_hash = self.blocks.get("l")
 
-        if eval(last_block)["PrevBlockHash"]:
-            self.current_hash = eval(last_block)["PrevBlockHash"]
-            yield eval(last_block)
+    #     last_block = self.blocks.get(self.current_hash).decode()
 
-    def find_tx(self, tid):
-        """
-        根据交易id找到交易信息
-        :param tid:
-        :return:
-        """
-        while True:
-            try:
-                block = next(self.iterator())
-            except StopIteration:
+    #     if eval(last_block)["PrevBlockHash"]:
+    #         self.current_hash = eval(last_block)["PrevBlockHash"]
+    #         yield eval(last_block)
 
-                genesis_hash = self.blocks.get(self.current_hash).decode()
-                last_block = eval(genesis_hash)
+    # def find_tx(self, tid):
+    #     """
+    #     根据交易id找到交易信息
+    #     :param tid:
+    #     :return:
+    #     """
+    #     while True:
+    #         try:
+    #             block = next(self.iterator())
+    #         except StopIteration:
 
-                coinbase_tx = last_block["Transactions"]
-                for tx in coinbase_tx:
-                    tx_obj = json.loads(tx.decode())
-                    if tx_obj["ID"] == tid:
-                        return tx
-                break
+    #             genesis_hash = self.blocks.get(self.current_hash).decode()
+    #             last_block = eval(genesis_hash)
 
-            for tx in block["Transactions"]:
-                tx_obj = json.loads(tx.decode())
+    #             coinbase_tx = last_block["Transactions"]
+    #             for tx in coinbase_tx:
+    #                 tx_obj = json.loads(tx.decode())
+    #                 if tx_obj["ID"] == tid:
+    #                     return tx
+    #             break
 
-                if tx_obj["ID"] == tid:
-                    return tx
+    #         for tx in block["Transactions"]:
+    #             tx_obj = json.loads(tx.decode())
 
-            return "未找到交易信息"
+    #             if tx_obj["ID"] == tid:
+    #                 return tx
 
-    def find_utxo(self):
-        """
-        找出所有的utxo
-        :return:
-        """
-        utxo = dict()  # 存储utxo的信息
-        spent_tx = dict()
-        while True:
-            try:
-                last_block = next(self.iterator())
-            except StopIteration:
-                genesis_hash = self.blocks.get(self.current_hash).decode()
-                last_block = eval(genesis_hash)
+    #         return "未找到交易信息"
 
-                coinbase_tx = last_block["Transactions"]
-                for tx in coinbase_tx:
+    # def find_utxo(self):
+    #     """
+    #     找出所有的utxo
+    #     :return:
+    #     """
+    #     utxo = dict()  # 存储utxo的信息
+    #     spent_tx = dict()
+    #     while True:
+    #         try:
+    #             last_block = next(self.iterator())
+    #         except StopIteration:
+    #             genesis_hash = self.blocks.get(self.current_hash).decode()
+    #             last_block = eval(genesis_hash)
 
-                    tx_json = json.loads(tx.decode())
+    #             coinbase_tx = last_block["Transactions"]
+    #             for tx in coinbase_tx:
 
-                    utxo[tx_json["ID"]] = []
+    #                 tx_json = json.loads(tx.decode())
 
-                    for out in tx_json["Vout"]:
-                        if not spent_tx[tx_json["ID"]]:
-                            utxo[tx_json["ID"]].append(out)
+    #                 utxo[tx_json["ID"]] = []
 
-                break     # 程序退出边界条件
+    #                 for out in tx_json["Vout"]:
+    #                     if not spent_tx[tx_json["ID"]]:
+    #                         utxo[tx_json["ID"]].append(out)
 
-            for tx in last_block["Transactions"]:
-                tx_json = json.loads(tx.decode())
-                utxo[tx_json["ID"]] = []
+    #             break     # 程序退出边界条件
 
-                for out in tx_json["Vout"]:
-                    if not spent_tx[tx_json["ID"]]:
-                        utxo[tx_json["ID"]].append(out)
+    #         for tx in last_block["Transactions"]:
+    #             tx_json = json.loads(tx.decode())
+    #             utxo[tx_json["ID"]] = []
 
-                for vin in tx_json["Vin"]:
-                    spent_tx[vin["txid"]] = []
+    #             for out in tx_json["Vout"]:
+    #                 if not spent_tx[tx_json["ID"]]:
+    #                     utxo[tx_json["ID"]].append(out)
 
-                for vin in tx_json["Vin"]:
-                    spent_tx[vin["txid"]].append(vin)
+    #             for vin in tx_json["Vin"]:
+    #                 spent_tx[vin["txid"]] = []
 
-        return utxo
+    #             for vin in tx_json["Vin"]:
+    #                 spent_tx[vin["txid"]].append(vin)
 
-    def all_hashes(self):
+    #     return utxo
 
-        return [b for b in self.blocks.keys() if b != 'l']
+    # def all_hashes(self):
 
-    def mine_block(self, transactions):
+    #     return [b for b in self.blocks.keys() if b != 'l']
 
-        """
-        根据链上的最后一个区块的hash值，生成一个新的block
-        :param transactions:
-        :return:
-        """
-        lash_hash = self.blocks.get("l").decode()
-        height = self.get_height()
-        b = Block()
-        new_block = b.new_block(transactions, lash_hash, height + 1)
-        return new_block
+    # def mine_block(self, transactions):
 
-    def sign_transaction(self, tx):
-        """
-        交易信息加密
-        :return:
-        """
-        pass
+    #     """
+    #     根据链上的最后一个区块的hash值，生成一个新的block
+    #     :param transactions:
+    #     :return:
+    #     """
+    #     lash_hash = self.blocks.get("l").decode()
+    #     height = self.get_height()
+    #     b = Block()
+    #     new_block = b.new_block(transactions, lash_hash, height + 1)
+    #     return new_block
 
-    def verify_transaction(self, tx):
-        """
-        交易信息解密
-        :return:
-        """
-        pass
+    # def sign_transaction(self, tx):
+    #     """
+    #     交易信息加密
+    #     :return:
+    #     """
+    #     pass
 
-    def print_blockchain(self):
-        """
-        输出blockchain
+    # def verify_transaction(self, tx):
+    #     """
+    #     交易信息解密
+    #     :return:
+    #     """
+    #     pass
 
-        :return:
-        """
-        # for b in self.blocks:
-        #     print(b)
+    # def print_blockchain(self):
+    #     """
+    #     输出blockchain
 
-        blocks = []
+    #     :return:
+    #     """
+    #     # for b in self.blocks:
+    #     #     print(b)
 
-        for b in self.blocks.keys():
+    #     blocks = []
 
-            if b.decode() != 'l':
-                v = self.blocks.get(b).decode()
-                blocks.append(eval(v))
-        return blocks
- """
+    #     for b in self.blocks.keys():
+
+    #         if b.decode() != 'l':
+    #             v = self.blocks.get(b).decode()
+    #             blocks.append(eval(v))
+    #     return blocks

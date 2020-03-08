@@ -26,7 +26,7 @@ class Redis:
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
     def __init__(self, Host=None, Port=None, Db=None, Password=None):
 
-        # 如果传入参数，则用传入的参数修改默认属性
+        # 如果传入参数，则用传入的参数修改默认属性 #TODO(ZHOU) 用默认参数不可以吗:<
         self.host = Host if Host else self.host
         self.port = Port if Port else self.port
         self.db = Db if Db else self.db

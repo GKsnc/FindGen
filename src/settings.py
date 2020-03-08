@@ -11,4 +11,4 @@
 
 
 maxNonce = 1 << 63 - 1
-targetBits = 16
+targetBits = 1

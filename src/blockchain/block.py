@@ -13,7 +13,7 @@
 import time
 import hashlib
 import json
-# from consensus.proof_of_work import ProofOfWork 共识算法
+from consensus.pow import ProofOfWork
 # from core.transactions.transaction import Transaction 记录，记录生成程序
 
 
@@ -58,12 +58,12 @@ class Block(object):
             # "Height": height
         }
 
-        # 共识算法 # TODO(ZHOU) 共识算法
-        # pow = ProofOfWork(block)
+        # 共识算法
+        pow = ProofOfWork(block)
 
-        # b_hash, nonce = pow.run()
-        # TODO(ZHOU) block["Hash"] = b_hash
-        # block["Nonce"] = nonce
+        b_hash, nonce = pow.run()
+        block["Hash"] = b_hash
+        block["Nonce"] = nonce
 
         self.block = block
         return block
@@ -78,7 +78,6 @@ class Block(object):
         return hashlib.sha256(block_string).hexdigest()
 
 
-# TODO(ZHOU) 创建一个区块，等记录生成程序完成
 def new_genesis_block(coinbase):
    pass
 # 币基交易（coinbase）的存在必要性

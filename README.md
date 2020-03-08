@@ -4,6 +4,13 @@
 
 ## 区块链项目——防伪链
 
+### 安装
+
+安装依赖库:
+```
+sudo pip install -r requirements.txt
+```
+
 ### 架构图
 
 ![架构图](https://images.gitee.com/uploads/images/2020/0201/144629_2987d444_5446993.jpeg "架构图.jpeg")
