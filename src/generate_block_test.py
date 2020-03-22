@@ -23,7 +23,7 @@ def main():
 
     生产者:生成参与者地址->商品地址生成->记录生成->生成区块(共识算法参与)->上链(区块链,redis,通信等问题)
     """
-    producer=adress.Partner() # 生产者实例化
+    producer=adress.Participant() # 生产者实例化
     producer.new_keypair() # 生产者公私钥对生成
     
     pgid_worker=goodsid.IdWorker(69012345678912,0) # TODO(ZHOU) 输入没有校验（EAN13码是有校验功能的，此程序还未实现）
@@ -45,5 +45,10 @@ if __name__ == "__main__":
     main()
 
 
-# TODO(ZHOU) 包编程问题
-# TODO(ZHOU) 可以增加些校验
+# TODO(ZHOU) 注意某些地方需要校验
+# 参与者加入，gfw模型的运作，参与者的行为要满足gfw模型的规则与与区块链的规则
+# 只要商品在流通时留下记录（可信），那么就可查
+# 区块链是为了实现可信，记录，
+# gfw是为了规范记录；（怎么感觉有点类似以太坊的智能合约）
+
+# 也就是说这么多模块，几乎都是为了区块链而服务的

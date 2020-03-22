@@ -49,7 +49,7 @@ class ProofOfWork:
 
         data = "".join([
             self.block["PrevBlockHash"],
-            # TODO(ZHOU) self.hash_txs()   #Merkle树
+            # self.hash_txs()   #Merkle树
             timestamp,
             hex(targetBits),
             hex(self.nonce)
@@ -91,3 +91,5 @@ class ProofOfWork:
 # pow也是可以的，但会产生不必要计算，比如生产商发布商品时，只要它满足一定的资质就可以发布商品，我们也能追踪到是他发布的，但如果它造假呢？
 #怎么造假，假设给它发布区块的权利，商品数量不对，比如：将商品数量增多，而实际上并没有那么多，到最后会有一些商品ID是没有对应商品的
 #先放放，这个问题，我先将最初版的程序做出来
+
+#TODO(ZHOU) merkel树调试

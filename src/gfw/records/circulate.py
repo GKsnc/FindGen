@@ -74,3 +74,5 @@ class CirculateRecord(object):
 
             # 不满足规则，这条记录就不符合规范
             return False
+
+#TODO(ZHOU) 规则编写；初步的三条规则，进一步，需要什么，等需要什么，在编写。

@@ -54,6 +54,50 @@ class BlockChain:
         else:
             return "区块不存在"
 
+#TODO(ZHOU) 区块链的操作，看gfw需要什么，这边就提供什么
+
+    def iterator(self):
+
+        # 这里没有迭代创世区块
+        if not self.current_hash:
+            self.current_hash = self.blocks.get("l")
+
+        last_block = self.blocks.get(self.current_hash).decode()
+
+        if eval(last_block)["PrevBlockHash"]:
+            self.current_hash = eval(last_block)["PrevBlockHash"]
+            yield eval(last_block)
+
+    #TODO(ZHOU) 完成查找商品ID所有流通记录。 未完成
+    def find_tx(self, tid):
+        """
+        根据交易id找到交易信息
+        :param tid:
+        :return:
+        """
+        while True:
+            try:
+                block = next(self.iterator())
+            except StopIteration:
+
+                genesis_hash = self.blocks.get(self.current_hash).decode()
+                last_block = eval(genesis_hash)
+
+                coinbase_tx = last_block["Transactions"]
+                for tx in coinbase_tx:
+                    tx_obj = json.loads(tx.decode())
+                    if tx_obj["ID"] == tid:
+                        return tx
+                break
+
+            for tx in block["Transactions"]:
+                tx_obj = json.loads(tx.decode())
+
+                if tx_obj["ID"] == tid:
+                    return tx
+
+            return "未找到交易信息"    
+
 
     # def get_height(self):
     #     last_hash = self.blocks.get("l")
@@ -61,46 +105,7 @@ class BlockChain:
 
     #     return eval(last_block)["Height"]
 
-    # def iterator(self):
 
-    #     # 这里没有迭代创世区块
-    #     if not self.current_hash:
-    #         self.current_hash = self.blocks.get("l")
-
-    #     last_block = self.blocks.get(self.current_hash).decode()
-
-    #     if eval(last_block)["PrevBlockHash"]:
-    #         self.current_hash = eval(last_block)["PrevBlockHash"]
-    #         yield eval(last_block)
-
-    # def find_tx(self, tid):
-    #     """
-    #     根据交易id找到交易信息
-    #     :param tid:
-    #     :return:
-    #     """
-    #     while True:
-    #         try:
-    #             block = next(self.iterator())
-    #         except StopIteration:
-
-    #             genesis_hash = self.blocks.get(self.current_hash).decode()
-    #             last_block = eval(genesis_hash)
-
-    #             coinbase_tx = last_block["Transactions"]
-    #             for tx in coinbase_tx:
-    #                 tx_obj = json.loads(tx.decode())
-    #                 if tx_obj["ID"] == tid:
-    #                     return tx
-    #             break
-
-    #         for tx in block["Transactions"]:
-    #             tx_obj = json.loads(tx.decode())
-
-    #             if tx_obj["ID"] == tid:
-    #                 return tx
-
-    #         return "未找到交易信息"
 
     # def find_utxo(self):
     #     """
