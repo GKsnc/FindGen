@@ -2,10 +2,10 @@
 # -*- encoding: utf-8 -*-
 
 """
-区块信息的存储与查询
+区块信息的存储与查询。
 
-使用前电脑需要安装redis数据库
-使用第三方库redis
+使用前电脑需要安装redis数据库，使用第三方库redis。
+redis只做存取目的。此类作为中间件，处理redis到blockchain。
 
 @Time    :   2020/02/5
 @Author  :   Kang
@@ -26,7 +26,7 @@ class Redis:
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
     def __init__(self, Host=None, Port=None, Db=None, Password=None):
 
-        # 如果传入参数，则用传入的参数修改默认属性 #TODO(ZHOU) 用默认参数不可以吗:<
+        # 如果传入参数，则用传入的参数修改默认属性
         self.host = Host if Host else self.host
         self.port = Port if Port else self.port
         self.db = Db if Db else self.db
@@ -37,7 +37,11 @@ class Redis:
 
     # 将区块信息存入数据库
     def set(self, block,info):  # block可以唯一确定一个区块，info为区块信息
-            self.rds.set(block,info)
+        """
+        :param block:区块hash
+        :param info：区块
+        """
+        self.rds.set(block,info) # 返回值？
 
     # 获取指定key值的value值，value为json字符串
     def get(self, key):
