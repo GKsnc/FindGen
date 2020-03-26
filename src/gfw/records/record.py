@@ -27,7 +27,7 @@ class Record(object):
 
     def __init__(self, id, pri_key, pub_key):
         """
-        :param id:商品id
+        :param id:商品id #这个改成记录编号？
         :param pri_key: 参与者私钥
         :param pub_key: 参与者公钥
         """

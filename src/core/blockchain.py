@@ -54,7 +54,7 @@ class BlockChain:
         else:
             return "区块不存在"
 
-#TODO(ZHOU) 区块链的操作，看gfw需要什么，这边就提供什么
+    #TODO(ZHOU) 区块链的操作，看gfw需要什么，这边就提供什么
 
     def iterator(self):
         # 创世区块的迭代？
@@ -96,6 +96,49 @@ class BlockChain:
 
             return "未找到交易信息"
 
+    def find_utxo(self):
+        """
+        找出所有的utxo
+        :return:
+        """
+        utxo = dict()  # 存储utxo的信息
+        spent_tx = dict()
+        while True:
+            try:
+                last_block = next(self.iterator())
+            except StopIteration:
+                genesis_hash = self.blocks.get(self.current_hash).decode()
+                last_block = eval(genesis_hash)
+
+                coinbase_tx = last_block["Transactions"]
+                for tx in coinbase_tx:
+
+                    tx_json = json.loads(tx.decode())
+
+                    utxo[tx_json["ID"]] = []
+
+                    for out in tx_json["Vout"]:
+                        if not spent_tx[tx_json["ID"]]:
+                            utxo[tx_json["ID"]].append(out)
+
+                break     # 程序退出边界条件
+
+            for tx in last_block["Transactions"]:
+                tx_json = json.loads(tx.decode())
+                utxo[tx_json["ID"]] = []
+
+                for out in tx_json["Vout"]:
+                    if not spent_tx[tx_json["ID"]]:
+                        utxo[tx_json["ID"]].append(out)
+
+                for vin in tx_json["Vin"]:
+                    spent_tx[vin["txid"]] = []
+
+                for vin in tx_json["Vin"]:
+                    spent_tx[vin["txid"]].append(vin)
+
+        return utxo   
+
 
     # def get_height(self):
     #     last_hash = self.blocks.get("l")
@@ -103,50 +146,6 @@ class BlockChain:
 
     #     return eval(last_block)["Height"]
 
-
-
-    # def find_utxo(self):
-    #     """
-    #     找出所有的utxo
-    #     :return:
-    #     """
-    #     utxo = dict()  # 存储utxo的信息
-    #     spent_tx = dict()
-    #     while True:
-    #         try:
-    #             last_block = next(self.iterator())
-    #         except StopIteration:
-    #             genesis_hash = self.blocks.get(self.current_hash).decode()
-    #             last_block = eval(genesis_hash)
-
-    #             coinbase_tx = last_block["Transactions"]
-    #             for tx in coinbase_tx:
-
-    #                 tx_json = json.loads(tx.decode())
-
-    #                 utxo[tx_json["ID"]] = []
-
-    #                 for out in tx_json["Vout"]:
-    #                     if not spent_tx[tx_json["ID"]]:
-    #                         utxo[tx_json["ID"]].append(out)
-
-    #             break     # 程序退出边界条件
-
-    #         for tx in last_block["Transactions"]:
-    #             tx_json = json.loads(tx.decode())
-    #             utxo[tx_json["ID"]] = []
-
-    #             for out in tx_json["Vout"]:
-    #                 if not spent_tx[tx_json["ID"]]:
-    #                     utxo[tx_json["ID"]].append(out)
-
-    #             for vin in tx_json["Vin"]:
-    #                 spent_tx[vin["txid"]] = []
-
-    #             for vin in tx_json["Vin"]:
-    #                 spent_tx[vin["txid"]].append(vin)
-
-    #     return utxo
 
     # def all_hashes(self):
 
