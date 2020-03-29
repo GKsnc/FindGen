@@ -27,7 +27,7 @@ class BlockChain:
         # 然后再存储在redis
         # self.blocks = []
 
-        self.blocks = Redis() # 直接在本机安装redis,也就是要捆绑安装咯
+        self.blocks = Redis()
         self.current_hash = None
 
     def add_block(self, new_block):
@@ -63,12 +63,12 @@ class BlockChain:
 
         last_block = self.blocks.get(self.current_hash).decode() #为什么要decode？
 
-        if eval(last_block)["PrevBlockHash"]: # eval？话说python有eval的漏洞吗，这里注意一下
+        if eval(last_block)["PrevBlockHash"]: # 这个eval会有漏洞吗，需注意一下
             self.current_hash = eval(last_block)["PrevBlockHash"]
             yield eval(last_block)
 
     #TODO(ZHOU) 完成查找商品ID所有流通记录。 未完成
-    def find_tx(self, gid):
+    def find_rc(self, gid):
         """
         根据商品id找到交易信息
         :param gid:商品id
@@ -96,12 +96,12 @@ class BlockChain:
 
             return "未找到交易信息"
 
-    def find_utxo(self):
+    def find_urc(self):
         """
-        找出所有的utxo
+        找出所有的urc
         :return:
         """
-        utxo = dict()  # 存储utxo的信息
+        urc = dict()  # 存储urc的信息
         spent_tx = dict()
         while True:
             try:
@@ -115,21 +115,21 @@ class BlockChain:
 
                     tx_json = json.loads(tx.decode())
 
-                    utxo[tx_json["ID"]] = []
+                    urc[tx_json["ID"]] = []
 
                     for out in tx_json["Vout"]:
                         if not spent_tx[tx_json["ID"]]:
-                            utxo[tx_json["ID"]].append(out)
+                            urc[tx_json["ID"]].append(out)
 
                 break     # 程序退出边界条件
 
             for tx in last_block["Transactions"]:
                 tx_json = json.loads(tx.decode())
-                utxo[tx_json["ID"]] = []
+                urc[tx_json["ID"]] = []
 
                 for out in tx_json["Vout"]:
                     if not spent_tx[tx_json["ID"]]:
-                        utxo[tx_json["ID"]].append(out)
+                        urc[tx_json["ID"]].append(out)
 
                 for vin in tx_json["Vin"]:
                     spent_tx[vin["txid"]] = []
@@ -137,7 +137,7 @@ class BlockChain:
                 for vin in tx_json["Vin"]:
                     spent_tx[vin["txid"]].append(vin)
 
-        return utxo   
+        return urc   
 
 
     # def get_height(self):
