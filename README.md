@@ -21,6 +21,8 @@ sudo pip install -r requirements.txt
 
 ### 数据结构
 
+![数据结构](https://images.gitee.com/uploads/images/2020/0329/164640_a3aebf7e_5446993.png "数据结构.png")
+
 "Version" : ""，4字节，16进制int  
 "PrevBlockHash" : "", 32字节，字符，（长度，类型由hash函数确定）；验证，生成hash统一排序  
 "MerkleRoot" : "", 字符串  
