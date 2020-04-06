@@ -20,7 +20,43 @@ from consensus.pow import ProofOfWork
 class BlockChain:
     """
     区块链。
+    核心，对区块链的存取，查询等操作。
     """
+
+    def find_urc(self):
+        """
+        查找所有的未完成的记录（urc）。
+        :return urc:类json格式
+        """
+        urc=dict()
+        finished_urc=dict()
+        while True:
+            try:
+                last_block = next(self.iterator())
+            except StopIteration:
+                genesis_hash = self.blocks.get(self.current_hash).decode()
+                last_block = eval(genesis_hash)
+
+                coinbase_tx = last_block["Transactions"]
+                for tx in coinbase_tx:
+
+                    rc_json = json.loads(tx.decode())
+
+                    urc[rc_json["ID"]] = []
+
+                    for out in rc_json["Vout"]:
+                        if not spent_tx[rc_json["ID"]]:
+                            urc[rc_json["ID"]].append(out)
+
+                break     # 程序退出边界条件
+
+            for rc in last_block["Records"]:
+                rc_json = json.loads(rc.decode())
+                urc[rc_json["goods_id"]] = []
+                urc[rc_json["ID"]].append(rc_json['crec'])       
+
+        return urc
+
 
     def __init__(self):
         # 首先存储块在内存中
@@ -54,8 +90,6 @@ class BlockChain:
         else:
             return "区块不存在"
 
-    #TODO(ZHOU) 区块链的操作，看gfw需要什么，这边就提供什么
-
     def iterator(self):
         # 创世区块的迭代？
         if not self.current_hash:
@@ -67,7 +101,6 @@ class BlockChain:
             self.current_hash = eval(last_block)["PrevBlockHash"]
             yield eval(last_block)
 
-    #TODO(ZHOU) 完成查找商品ID所有流通记录。 未完成
     def find_rc(self, gid):
         """
         根据商品id找到交易信息
@@ -95,49 +128,6 @@ class BlockChain:
                     return rc
 
             return "未找到交易信息"
-
-    def find_urc(self):
-        """
-        找出所有的urc
-        :return:
-        """
-        urc = dict()  # 存储urc的信息
-        spent_tx = dict()
-        while True:
-            try:
-                last_block = next(self.iterator())
-            except StopIteration:
-                genesis_hash = self.blocks.get(self.current_hash).decode()
-                last_block = eval(genesis_hash)
-
-                coinbase_tx = last_block["Transactions"]
-                for tx in coinbase_tx:
-
-                    tx_json = json.loads(tx.decode())
-
-                    urc[tx_json["ID"]] = []
-
-                    for out in tx_json["Vout"]:
-                        if not spent_tx[tx_json["ID"]]:
-                            urc[tx_json["ID"]].append(out)
-
-                break     # 程序退出边界条件
-
-            for tx in last_block["Transactions"]:
-                tx_json = json.loads(tx.decode())
-                urc[tx_json["ID"]] = []
-
-                for out in tx_json["Vout"]:
-                    if not spent_tx[tx_json["ID"]]:
-                        urc[tx_json["ID"]].append(out)
-
-                for vin in tx_json["Vin"]:
-                    spent_tx[vin["txid"]] = []
-
-                for vin in tx_json["Vin"]:
-                    spent_tx[vin["txid"]].append(vin)
-
-        return urc   
 
 
     # def get_height(self):

@@ -32,13 +32,17 @@ def main()：
     # 查询，上链，验证(包括在各个需要的地方)
 
     # 完整下载区块，进行查询
-
     # 查询一件商品的流通情况
     # 方法一：遍历整个区块链，根据商品ID依次查找(速度慢，且不能重复利用查找结果)
     # 方法二：找出所有的类utxo(gfw的未完成商品) urc，unfinished record,未完成记录
     # 这里先等等，区块链的操作
     # json，redis，区块链，python之间是什么，二进制？字符串？列表？字典？json？
-    # 
+
+    # 查询的准备
+    urc=findgen_chain.find_urc()
+    # print(urc['goods_id'])
+
+    #TODO(ZHOU) 上链与验证
 
 
     # 用户行为(有很多，先看系统行为吧)
