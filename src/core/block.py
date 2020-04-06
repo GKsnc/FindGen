@@ -14,6 +14,7 @@ import time
 import hashlib
 import json
 from consensus.pow import ProofOfWork
+from gfw.records import record
 # from core.transactions.transaction import Transaction 记录，记录生成程序
 
 
@@ -76,6 +77,12 @@ class Block(object):
         block_string = json.dumps(block, sort_keys=True).encode()
         
         return hashlib.sha256(block_string).hexdigest()
+
+    def verify(self):
+        for re in self.block['Records']:
+            if not record.vertify(re):
+                # 这里是报错，还是返回一个信息？
+                return "商品流通记录错误！"
 
 
 def new_genesis_block(coinbase):

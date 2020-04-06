@@ -82,11 +82,11 @@ class Record(object):
 
     def vertify(self,record):
         """
-        验证签名
-        :param record:jilu
+        验证签名。
+        :param record:一条记录
         """
         sign_data=self.serialize() # 这个不应该这样些，但就这样了，之后再完善
-        ecdsa.verify(self.sign,sign_data,self.pub_key)
+        return ecdsa.verify(self.sign,sign_data,self.pub_key)
 
 
 # 测试

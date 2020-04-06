@@ -72,7 +72,6 @@ class BlockChain:
         :param new_block:
         :return:
         """
-
         # 使用区块的hash作为key
         # redis中L是最后一个区块的hash的key
         pow = ProofOfWork(new_block, new_block["Nonce"])
