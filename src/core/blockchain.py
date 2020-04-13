@@ -12,7 +12,7 @@
 """
 
 import json
-from blockchain.block import Block
+from core.block import Block
 from storage.redis_storage import Redis
 from consensus.pow import ProofOfWork
 

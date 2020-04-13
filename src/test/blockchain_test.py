@@ -13,9 +13,10 @@
 import sys
 sys.path.append("src")
 from core.blockchain import BlockChain
+from gfw.generater.adress import Participant
 
 
-def main()：
+def main():
 
     # 首先要先下载整个区块链，p2p(或者说检查完整性？)
 
@@ -24,7 +25,7 @@ def main()：
 
 
     # 然后实例化区块链
-    findgen_chain=BlockChain() # 区块链的一些参数，也在这一步完成，版本之类的
+    #findgen_chain=BlockChain() # 区块链的一些参数，也在这一步完成，版本之类的
 
     # 以上，初始化完成
 
@@ -37,7 +38,7 @@ def main()：
         # 这里先等等，区块链的操作
         # json，redis，区块链，python之间是什么，二进制？字符串？列表？字典？json？
     # 查询的准备
-    urc=findgen_chain.find_urc()
+    #urc=findgen_chain.find_urc()
     # print(urc['goods_id'])
 
     # 上链与验证
@@ -52,12 +53,39 @@ def main()：
     # findgen_chain.add_block(block)
 
 
-    # TODO(ZHOU)用户行为
-    # 按照设计的模型，谁都能发布吗，需要什么，如何公开，
+    # 用户行为
+    # 用户登录后，（系统查找地址，看看该地址有什么东西吗）
+    # 地址，公钥，私钥三者的关系，也就是说记录并不是直接公钥，签名，这里是有个系统的
+    '''
+    私钥到字符串（如果显示出来，不仅仅是识别率不高，而且私钥太长。）base58
+    公钥（公钥一般把byte数组是经过hex（16进制）的处理之后显示，不经过Base58的原因是： 公钥是用来验证私钥的签名，一般我们很少会看到公钥）
+    压缩的公钥（椭圆曲线是对称的，知道了一半的信息就可以推导出来另外一半的信息了），因此只需要保存一般的公钥信息即可
+    address=Base58(version+hash160(SHA-256(public key))+checksum)
+    '''
+    # 这些当然有用，但我目前最应该做的是地址是怎么用的
+    # 看了一些，还是没有什么头绪
+    # 最基本的创建，和基础的交易（流通）
+    # 地址没有保存到区块链当中，因为没有必要，使用公钥就能解决，但还是需要地址，为了方便显示
+    # 地址反算公钥？
+    # 我们交易是发向一个地址，那么这个地址在区块链是怎么标识的？（用公钥得出地址后，遍历区块链查找；这个地址上的交易，所以区块链上还是会有地址？
+    '''
+    BOB把公钥的哈希值提供给ALICE。公钥哈希就是大家所熟知的编码过的比特币地址，编码采用的base58进行，里面包含了一个版本序号、哈希值以及一个用来校验错误的值。
+    比特币地址可能通过任何介质传播，当然也包括单向的介质，这样可以切断发款人和收款人的联系，比特币地址还可以被进一步编码成其它的格式，比如包括”bitcoion：”的二维码地址。
+    '''
 
+    
+    #TODO 遍历区块链，查找地址的所有记录
+    #TODO 验证
 
-    # 添加区块上链
-    # findgen_chain.add_block(block) #数据结构见block模块，传输使用json；区块是怎么存储在redis中的
+    # 注册就是直接生成私钥就行了，然后地址
+    # buyer=Participant()
+    # buyer.get_address()
+    # print(buyer.address)
+    # print(buyer.private_key)
+    # print(buyer.pub_key)
+
+    # 遍历区块，这里我的地址系统还没有加入系统；
+
 
     # 区块长什么样，redis中区块，
     # 就存储成样本区块那样就行了，明文也不要紧
@@ -73,6 +101,9 @@ def main()：
     # 商品只有一条线，直接指向那个区块或者记录编号（记录的hash）不好吗，不是
     # 第一步找到所有商品的未完成输出（找的话，就直接利用标识了前一个记录的标识来找），第二步，使用商品发布新的区块（验证，一条条向前验证，成功就接受区块
     # 结束
+
+if __name__ == "__main__":
+    main()
 
 
 # 一些问题：

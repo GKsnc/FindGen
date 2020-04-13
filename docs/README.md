@@ -8,6 +8,9 @@
 >[白话 Merkle Tree](https://www.jianshu.com/p/458e5890662f)  
 >[共识算法之争](https://www.cnblogs.com/X-knight/p/9157814.html)  
 >[深入浅出区块链](https://learnblockchain.cn/)
+>[比特币的私钥，公钥和地址是什么？](https://www.jianshu.com/p/af6328cc693e)
+>[如何列出一个比特币地址的所有交易？](http://blog.hubwiz.com/2019/04/26/btc-list-addr-tx/)
+>[区块链](https://www.zhihu.com/topic/19901773/intro)
 
 ## 开源库参考
 

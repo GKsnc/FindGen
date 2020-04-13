@@ -26,18 +26,7 @@ class Participant(object):
     def __init__(self):
         self.pub_key = None
         self.private_key = None
-
-    def new_keypair(self):
-        """ 生成公私钥的键值对"""
-        priv_key = keys.gen_private_key(curve.P256)
-
-        pub_key = keys.get_public_key(priv_key, curve.P256)
-
-        pub_key = "".join([str(pub_key.x), str(pub_key.y)])
-
-        self.private_key = priv_key
-        self.pub_key = pub_key
-        return priv_key, pub_key
+        self.address=None
 
     def get_address(self):
         """
@@ -52,7 +41,20 @@ class Participant(object):
 
         adress=full_payload
         address = base58encode(full_payload)
+        self.address=address
         return adress
+
+    def new_keypair(self):
+        """ 生成公私钥的键值对"""
+        priv_key = keys.gen_private_key(curve.P256)
+
+        pub_key = keys.get_public_key(priv_key, curve.P256)
+
+        pub_key = "".join([str(pub_key.x), str(pub_key.y)])
+
+        self.private_key = priv_key
+        self.pub_key = pub_key
+        return priv_key, pub_key
 
     def hash_pk(self, pub_key):
         """

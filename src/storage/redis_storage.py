@@ -20,7 +20,7 @@ class Redis:
     # 设置连接属性
     host = 'localhost'
     port = 6379
-    db = findgen  # 数据库名称
+    db = "findgen"  # 数据库名称
     password = None
 
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
