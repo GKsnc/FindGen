@@ -41,6 +41,7 @@ class Redis:
         :param flag:区块hash
         :param info：区块
         """
+        # info = json.load(info)
         try:
             self.rds.set(flag, info)
             return 1
@@ -77,15 +78,12 @@ class Redis:
         return json_data
 
     #主从同步(非p2p),成功返回1，失败返回0
-    def sync(ip = None,master_port = 6379,slave_port = 6379 ):  #ip为主服务器ip
+    def sync(self,ip = None,master_port = 6379 ):  #ip为主服务器ip
         if ip == None:
             return 0
         try:
-            #建立连接
-            slave = redis.StrictRedis(host='localhost',port=slave_port)
-            master = redis.StrictRedis(host=ip,port=master_port)
             #主从复制
-            slave.slaveof(host=ip,port=master_port)
+            self.rds.slaveof(host=ip,port=master_port)
             return 1
         except:
             return 0
@@ -107,4 +105,4 @@ if __name__ == '__main__':
     print(con.keys())
     con.delete('姓名')
     print(con.keys())
-    # print(Redis.sync(ip='127.0.0.1'))
+    # print(con.sync(ip='127.0.0.1'))
