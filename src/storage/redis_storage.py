@@ -15,12 +15,12 @@ redis只做存取目的。此类作为中间件，处理redis到blockchain。
 import redis
 import json
 
-
 class Redis:
     # 设置连接属性
     host = 'localhost'
     port = 6379
     db = "findgen"  # 数据库名称
+    # db = 0
     password = None
 
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
@@ -35,13 +35,18 @@ class Redis:
         # 连接数据库
         self.rds = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
 
-    # 将区块信息存入数据库
-    def set(self, block,info):  # block可以唯一确定一个区块，info为区块信息
+    # 将区块信息存入数据库,成功返回1，失败返回0
+    def set(self,flag,info):  # flag可以唯一确定一个区块，info为区块信息
         """
-        :param block:区块hash
+        :param flag:区块hash
         :param info：区块
         """
-        self.rds.set(block,info) # 返回值？
+        # info = json.load(info)
+        try:
+            self.rds.set(flag, info)
+            return 1
+        except:
+            return 0
 
     # 获取指定key值的value值，value为json字符串
     def get(self, key):
@@ -59,20 +64,29 @@ class Redis:
     def save(self):
         self.rds.save()
 
-    # 清空数据库
-    def clear(self):
-        self.rds.flushall()
-
-    #将key对应的已编码的json字符串解码为字典对象
+    #将key对应的已编码的json字符串解析为字典对象返回
     def jget(self,key):
         #获取key对应的json字符串
         data = self.rds.get(key)
         #将key对应的son字符串解码为字典对象
         json_data = json.loads(data)
-        json_data = dict(json_data)
-        #将列表json_data['Records']转化为字典
-        json_data['Records'] = json_data.get('Records')[0]
+        #信息提取
+        json_data = str(json_data)
+        json_data = json_data.replace('[','')
+        json_data = json_data.replace(']','')
+        json_data = eval(json_data)
         return json_data
+
+    #主从同步(非p2p),成功返回1，失败返回0
+    def sync(self,ip = None,master_port = 6379 ):  #ip为主服务器ip
+        if ip == None:
+            return 0
+        try:
+            #主从复制
+            self.rds.slaveof(host=ip,port=master_port)
+            return 1
+        except:
+            return 0
 
 
 # 测试
@@ -80,17 +94,15 @@ if __name__ == '__main__':
     #打开文件
     with open('..\\..\\sample_block.json','r') as f:
         txt = f.read()
-
-    #连接数据库
-    con = Redis('127.0.0.1',6379,0)
-    #清空数据库
-    con.clear()
-    #将一个区块存入数据库
-    con.set('block0',txt)
-    #输出说有key值
+    # 连接数据库
+    con = Redis(Host='127.0.0.1',Db='0')
+    # print(con.keys())
+    if con.set('block1',txt):
+        print(con.get('block1'))
+        block = con.jget('block1')
+    # print(block["Records"]["crec"]["id"])
+    con.set('姓名','张三')
     print(con.keys())
-    #将key为'block0'的value值返回
-    block = con.jget('block0')
-    #查询信息
-    print(block['Records']['crec']['id'])
-    print(block['Version'])
+    con.delete('姓名')
+    print(con.keys())
+    # print(con.sync(ip='127.0.0.1'))
