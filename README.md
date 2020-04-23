@@ -34,13 +34,13 @@ sudo pip install -r requirements.txt
 样本区块见[仓库](https://gitee.com/nksnc/FindGen/blob/master/sample_block.json)
 
 >记录（Records）：  
-> "version"：16进制int  
-> "recid"：记录编号，记录上一条记录所在（待）
-> "sign"：签名算法和验证算法来定；字符型  
-> "pub_key"：公私钥对生成算法确定；都使用（公私钥）base58加解密  
-> "crec"：字典（对象里嵌套对象）  
->>流通记录（crec）：  
->>"goods_id"：由商品id生成确定，使用字符型（未使用编码解码方式，待优化）  
->>"seq"：int  
->>"circulate_flag"：int    这个和上面那个，int型真的可以吗  
->>"time"：浮点型（精确到秒)  
+> "version"：标识记录版本  
+> "sign"：签名（由交易方签名）  
+> "pub_key"：交易方的公钥  
+> "crec"：  
+>>"goods_id"：商品ID（商品的唯一标识）
+>>"seq"：流通索引  
+>>"circulate_flag"：流通标识（生产，购买。。。）  
+>>"time"：时间戳  
+>>"recid"：记录标识符（hash）  
+>>"adress":被交易方的地址(base58)  
