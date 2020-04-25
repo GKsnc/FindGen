@@ -29,7 +29,7 @@ def main():
     pgid_worker=goodsid.IdWorker(69012345678912,0) # TODO(ZHOU) 输入没有校验（EAN13码是有校验功能的，此程序还未实现）
     goods_1=pgid_worker.get_id() # 生成一个商品ID
 
-    rec=record.Record(goods_1,producer.private_key,producer.pub_key) # 实例化记录处理程序
+    rec=record.Records(goods_1,producer.private_key,producer.pub_key) # 实例化记录处理程序
     r_1=rec.new_record(0x0) # 生成一条记录
     recs=[]
     recs.append(r_1)
