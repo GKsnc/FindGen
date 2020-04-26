@@ -28,7 +28,6 @@ class Records(object):
         :param pub_key: 参与者公钥
         #TODO 使用公私钥地址等，统一使用一个对象（参与者）？类
         """
-        self.id=id
         self.version=version
         self.pri_key=pri_key
         self.pub_key=pub_key
@@ -41,6 +40,23 @@ class Records(object):
         :param adress: 标准地址.
         """
         record = dict()
+        #生产记录
+        if circulate_flag==0x000f:
+            crec={
+                'goods_id':id,
+                'seq':0,
+                'circulate_flag':circulate_flag,
+                'time':int(time.time()),
+                'adress':adress
+                }
+            record['crec']=crec
+            record['version']=self.version
+            record['pub_key']=self.pub_key
+            record['recid']=hashlib.sha256(self.serialize(record)).hexdigest() # hash记录，成为交易标识
+            record['sign']=self.sign(self.pri_key,record)
+            return record
+        
+        
 
         # TODO(ZHOU) 此商品ID之前所有的流通记录,
         # 先搜索，判断；这件事，可以在初始化是，完成，或者空闲时间，完成，；
@@ -48,24 +64,61 @@ class Records(object):
         # 验证ID冲突,验证
         id_pre_crecord=list()
 
-
-        record['crec']=self.new_circulate_record(id,circulate_flag,id_pre_crecord,adress)
-        #填写记录头
+        # 填写流通记录（生成一条流通记录，内含验证）TODO 验证之前的记录待定
+        # 创建只做创建功能，验证由模块统一验证，因为这个记录，别人收到肯定会进行验证，或者发布的时候进行验证
+        # 创建需要什么规则吗？
+        # 流通记录的字段怎么填写？
+        # 商品ID，流通标识，地址，私钥，公钥，由交易方填写，剩下的交由系统
+        # 剩下的就只有序号，这个字段该怎么填写？
+        # 需要验证 环节吗？还是直接调用数据库，来填写？
+        # 还有交易标识（recid）这个字段，也就是肯定需要之前的记录
+        # 那就调用之前的
+        record['crec']=self.new_circulate_record(id,circulate_flag,adress)
+        # 填写记录头
         record['version']=self.version
         record['pub_key']=self.pub_key
         record['sign']=self.sign(self.pri_key,record)
         # 由之前交易标识,将字段延续下来
         # 如何验证
 
+        return record
 
-        crec=circulate.CirculateRecord(self.id,self.version)
+    # 创建流通记录
+    def new_circulate_record(self, id,circulate_flag,adress,seq):
+        """
+        创建一条流通记录。
 
-        self.new['version']=version
-        self.new['crec']=crec.new_circulate_record(circulate_flag,id_pre_crecord)
-        self.new['pub_key']=self.pub_key
-        self.new['sign']=self.sign(self.pri_key,self.new) # 签名时没有sign字段，运行函数后才生成
+        :param id: 商品id
+        :param circulate_flag: 流通标识
+        :param pre_rec:此商品ID之前的记录，list类型，记录是dict类型。待定 TODO
+        :param adress:标准地址
+        :param seq:流通索引。
+        """
+        #生产记录
+        if circulate_flag==0x000f:
+            crec={
+                'goods_id':id,
+                'seq':0,
+                'circulate_flag':circulate_flag,
+                'time':int(time.time()),
+                'adress':adress
+                }
+            return crec
 
-        return self.new
+        # 普通交易记录
+        crec={
+                'goods_id':id,
+                'seq':seq,
+                'circulate_flag':circulate_flag,
+                'time':int(time.time()),
+                'adress':adress
+                }
+        # 交易记录
+        #flag=self.valid_crec(pre_crec) 验证
+        #new['seq']=sorted(pre_crec,key=dict.get('seq'))[-1]['seq']+1 # 对列表中字典进行排序,选择最后一个seq+1；bug如果之前没有记录会出错，不过那是特使的记录，在此不表
+        return crec
+        
+        return new
  
     # 签名验证机制
     def sign(self, priv_key, record):
@@ -86,7 +139,6 @@ class Records(object):
         #序列化记录。
         # :return: 返回json
         """
-
         return json.dumps(record,sort_keys=True)
 
     def vertify(self,record):
@@ -103,33 +155,6 @@ class Records(object):
         #TODO(ZHOU) 自定义流通规则接口
         """
         pass
-    
-    def new_circulate_record(self, id,circulate_flag, pre_crec,adress):
-        """
-        创建一条流通记录。
-
-        :param id: 商品id
-        :param circulate_flag: 流通标识
-        :param pre_rec:此商品ID之前的记录，list类型，记录是dict类型。
-        :param adress:标准地址
-        """
-        #生产记录
-        if circulate_flag==0x000f:
-            #先填写流通记录
-            crec={
-                'goods_id':id,
-                'seq':0,
-                'circulate_flag':circulate_flag,
-                'time':int(time.time()),
-                'adress':adress
-                }
-            return crec
-            
-        # 交易记录
-        #flag=self.valid_crec(pre_crec) 验证
-        #new['seq']=sorted(pre_crec,key=dict.get('seq'))[-1]['seq']+1 # 对列表中字典进行排序,选择最后一个seq+1；bug如果之前没有记录会出错，不过那是特使的记录，在此不表
-        
-        return new
 
     # 全局流通规则验证
     def valid_crec(self,pre_crec):
