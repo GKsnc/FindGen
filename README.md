@@ -6,11 +6,15 @@
 
 ### 安装
 
-todo?:将整个程序(包括redis)打包进docker(未来更新，初版程序使用CLI)
+TODO:将程序(包括redis)打包docker(未来更新，初版程序使用CLI)  
+
+```
+git clone https://gitee.com/nksnc/FindGen.git
+```
 
 安装依赖库:
 ```
-sudo pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 安装redis

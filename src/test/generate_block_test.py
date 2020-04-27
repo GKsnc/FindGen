@@ -26,7 +26,7 @@ def main():
     producer=adress.Participant() # 生产者实例化
     producer.new_keypair() # 生产者公私钥对生成
     
-    pgid_worker=goodsid.IdWorker(69012345678912,0) # TODO(ZHOU) 输入没有校验（EAN13码是有校验功能的，此程序还未实现）
+    pgid_worker=goodsid.IdWorker(69012345678912,0)
     goods_1=pgid_worker.get_id() # 生成一个商品ID
 
     rec=record.Records(goods_1,producer.private_key,producer.pub_key) # 实例化记录处理程序
@@ -43,12 +43,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# TODO(ZHOU) 注意某些地方需要校验
-# 参与者加入，gfw模型的运作，参与者的行为要满足gfw模型的规则与与区块链的规则
-# 只要商品在流通时留下记录（可信），那么就可查
-# 区块链是为了实现可信，记录，
-# gfw是为了规范记录；（怎么感觉有点类似以太坊的智能合约）
-
-# 也就是说这么多模块，几乎都是为了区块链而服务的
