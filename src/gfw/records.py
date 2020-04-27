@@ -12,6 +12,7 @@
 
 import hashlib
 import json
+import time
 from fastecdsa import ecdsa
 
 version=0x0001 # 记录版本（流通规则）
@@ -32,12 +33,13 @@ class Records(object):
         self.pri_key=pri_key
         self.pub_key=pub_key
 
-    def new_record(self,id,circulate_flag,adress):
+    def new_record(self,id,circulate_flag,adress,precord=[]):
         """
         生成一条记录。
         :param id: 商品ID(单个),批量商品(TODO)
         :param circulate_flag: 16进制，流通标识详见README。
         :param adress: 标准地址.
+        :param precord: 根据商品ID或交易标识（recid）查找的之前的记录。
         """
         record = dict()
         #生产记录
@@ -56,31 +58,19 @@ class Records(object):
             record['sign']=self.sign(self.pri_key,record)
             return record
         
+        # 交易记录
+        crec = dict()
+        crec['goods_id'] = id
+        crec['seq'] = precord[-1]['crec']['seq']+1
+        crec['circulate_flag'] = circulate_flag
+        crec['time'] = int(time.time())
+        crec['address'] = adress
+        record['crec'] = crec
+        record['version'] = self.version
+        record['pub_key'] = self.pub_key
+        record['recid'] = precord[-1]['recid']
+        record['sign'] = self.sign(self.pri_key,record)
         
-
-        # TODO(ZHOU) 此商品ID之前所有的流通记录,
-        # 先搜索，判断；这件事，可以在初始化是，完成，或者空闲时间，完成，；
-        # 这个功能实现在blockchain模块中
-        # 验证ID冲突,验证
-        id_pre_crecord=list()
-
-        # 填写流通记录（生成一条流通记录，内含验证）TODO 验证之前的记录待定
-        # 创建只做创建功能，验证由模块统一验证，因为这个记录，别人收到肯定会进行验证，或者发布的时候进行验证
-        # 创建需要什么规则吗？
-        # 流通记录的字段怎么填写？
-        # 商品ID，流通标识，地址，私钥，公钥，由交易方填写，剩下的交由系统
-        # 剩下的就只有序号，这个字段该怎么填写？
-        # 需要验证 环节吗？还是直接调用数据库，来填写？
-        # 还有交易标识（recid）这个字段，也就是肯定需要之前的记录
-        # 那就调用之前的
-        record['crec']=self.new_circulate_record(id,circulate_flag,adress)
-        # 填写记录头
-        record['version']=self.version
-        record['pub_key']=self.pub_key
-        record['sign']=self.sign(self.pri_key,record)
-        # 由之前交易标识,将字段延续下来
-        # 如何验证
-
         return record
 
     # 创建流通记录

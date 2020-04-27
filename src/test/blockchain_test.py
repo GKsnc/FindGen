@@ -9,13 +9,13 @@
 @Author  :   ZHOU 
 """
 
-# here put the import lib
 import sys
 sys.path.append("src")
 from core.blockchain import BlockChain
 from gfw.generater.adress import Participant
 
-
+# 0427更新：这个函数，是为了理清楚整个流程
+# 现在，由于一些结构的改变，回到上一个问题，如何生成一个区块
 def main():
 
     # 首先要先下载整个区块链，p2p(或者说检查完整性？)
@@ -74,8 +74,8 @@ def main():
     '''
     
 
-    #TODO 生产，流通，交易，验证 功能编写
-    # 有点乱，需要整理一下
+    # 生产，流通，交易，验证 功能编写
+    # 见系统说明文件
 
     # 注册就是直接生成私钥就行了，然后地址
     # buyer=Participant()
@@ -104,7 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# 一些问题：
-# 连接到本机上的redis，安全性，还有redis的安装问题 TODO(ZHOU)，存储在redis是没有加密的吗？需要加密吗？不需要，区块链设计就解决了这个问题
