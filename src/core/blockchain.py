@@ -22,7 +22,37 @@ class BlockChain:
     区块链。
     核心，对区块链的存取，查询等操作。
     """
+    def __init__(self):
+        # 首先存储块在内存中
+        # 然后再存储在redis
+        # self.blocks = []
 
+        self.blocks = Redis()
+        self.current_hash = None
+
+    def add_block(self, new_block):
+        """
+        添加block到链上
+        :param new_block:
+        :return:
+        """
+        # 使用区块的hash作为key
+        # redis中L是最后一个区块的hash的key
+        pow = ProofOfWork(new_block, new_block["Nonce"])
+        if pow.validate(): # TODO(ZHOU) 了解如何验证合法性(validate)
+            # self.blocks.append(new_block)
+            if not self.blocks.get(new_block["Hash"]): # 不能有相同hash加入
+                self.blocks.set(new_block["Hash"], new_block)
+                self.blocks.set("L", new_block["Hash"])
+
+    def get_block(self, block_hash):
+        block = self.blocks.get(block_hash)
+        if block:
+            return eval(block.decode)
+
+        else:
+            return "区块不存在"
+    
     def find_urc(self):
         """
         查找所有的未完成的记录（urc）。
@@ -56,38 +86,6 @@ class BlockChain:
                 urc[rc_json["ID"]].append(rc_json['crec'])       
 
         return urc
-
-
-    def __init__(self):
-        # 首先存储块在内存中
-        # 然后再存储在redis
-        # self.blocks = []
-
-        self.blocks = Redis()
-        self.current_hash = None
-
-    def add_block(self, new_block):
-        """
-        添加block到链上
-        :param new_block:
-        :return:
-        """
-        # 使用区块的hash作为key
-        # redis中L是最后一个区块的hash的key
-        pow = ProofOfWork(new_block, new_block["Nonce"])
-        if pow.validate(): # TODO(ZHOU) 了解如何验证合法性(validate)
-            # self.blocks.append(new_block)
-            if not self.blocks.get(new_block["Hash"]): # 不能有相同hash加入
-                self.blocks.set(new_block["Hash"], new_block)
-                self.blocks.set("L", new_block["Hash"])
-
-    def get_block(self, block_hash):
-        block = self.blocks.get(block_hash)
-        if block:
-            return eval(block.decode)
-
-        else:
-            return "区块不存在"
 
     def iterator(self):
         # 创世区块的迭代？

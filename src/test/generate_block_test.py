@@ -9,15 +9,14 @@
 @Author  :   ZHOU 
 """
 
+import sys
+sys.path.append("src")
 import json
-from blockchain import block
-from blockchain.blockchain import BlockChain
-from gfw.generater import adress
-from gfw.generater import goodsid
-from gfw.records import record
+from core.adress import Participant
 
 
-def main():
+# 生成区块测试v1
+def testv1():
     """
     区块生成流程。
 
@@ -40,6 +39,25 @@ def main():
     bolockchain=BlockChain() # 实例化区块链
     bolockchain.add_block(blo_1) # 添加区块到区块链中
 
+# 生成区块测试v2
+# 0427 最后的“大”更新
+def main():
+    """
+    生成区块。
+    第一步，需要有参与方；三方，生产者，交易方，被交易方。
+    第二步，商品；由生产者生成商品ID，并发布出去。
+    第三步，交易；交易方与被交易方交易商品，生成记录，广播出去。
+    第四步，“矿工”发布区块；接受到的记录，挖矿，发布区块。（挖矿前，验证区块）
+    第五步，接收区块，验证。
+    """
+    
+    # 生产者，生成公私钥对 
+    producer = Participant() # 实例化
+    producer.new_keypair() # 生成公私钥对
+    producer.get_adress() # 生成地址
+    producer.save_to_file() # 保存私钥
+    # producer.load_to_file() # 读取私钥，构建地址
+    
 
 if __name__ == "__main__":
     main()

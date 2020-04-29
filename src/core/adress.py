@@ -11,12 +11,13 @@
 """
 
 import hashlib
+import json
 from fastecdsa import keys, curve
 from crypto.base58 import base58encode, base58decode
 
 version = "0x"
 addressChecksumLen = 4
-
+WalletFile = "wallet.txt"
 
 class Participant(object):
     """
@@ -25,14 +26,15 @@ class Participant(object):
 
     def __init__(self):
         self.pub_key = None
-        self.private_key = None
-        self.address=None
+        self.priv_key = None
+        self.address = None
 
-    def get_address(self):
+    def get_adress(self):
         """
-        :return:
+        返回地址。
+        :return:地址
         """
-        priv_key, pub_key = self.new_keypair()
+        priv_key, pub_key = self.priv_key,self.pub_key
         pubkey_hash = self.hash_pk(pub_key)
         version_payload = "".join([str(version), str(pubkey_hash)])
         checksum = self.checksum(version_payload)
@@ -45,14 +47,18 @@ class Participant(object):
         return adress
 
     def new_keypair(self):
-        """ 生成公私钥的键值对"""
-        priv_key = keys.gen_private_key(curve.P256)
+        """
+        生成公私钥的键值对
+        :return :返回公私钥。
+        """
+        priv_key = keys.gen_private_key(curve.P256) # 私钥只能int型，来生成公钥
 
-        pub_key = keys.get_public_key(priv_key, curve.P256)
+        pub_key = keys.get_public_key(priv_key, curve.P256) # 公钥可以byte，bytearray, str，来生成地址
+        # print(type(pub_key))
 
         pub_key = "".join([str(pub_key.x), str(pub_key.y)])
 
-        self.private_key = priv_key
+        self.priv_key = priv_key
         self.pub_key = pub_key
         return priv_key, pub_key
 
@@ -77,9 +83,8 @@ class Participant(object):
 
         return ripemd160_value
 
+    # 校验和
     def checksum(self, payload):
-        """"""
-
         if not isinstance(payload, (bytes, bytearray, str)):
             raise TypeError("payload 类型错误，需要str 或者bytes类型！")
 
@@ -108,6 +113,30 @@ class Participant(object):
 
         return actural_check_sum == target_check_sum
 
+    # 将私钥保存到文件中
+    def save_to_file(self):
+        priv_key=self.priv_key
+        if not isinstance(priv_key,str):
+            priv_key=str(priv_key)
+        with open(WalletFile, 'w') as f:
+            pri_dict = {
+                'PrivateKey':base58decode(priv_key)
+            }
+            f.write(json.dumps(pri_dict)+'\n')
+    
+    # 从文件中读取私钥,并构建公钥与地址
+    def load_to_file(self):
+        wallets = dict()
+        with open(WalletFile, 'r') as f:
+            for line in f.readlines():
+                line_dict = json.loads(line)
+                priv_key = line_dict['PrivateKey']
+        pub_key = keys.get_public_key(priv_key, curve.P256)
+        pub_key = "".join([str(pub_key.x), str(pub_key.y)])
+        self.priv_key = priv_key
+        self.pub_key = pub_key
+        return self.get_adress()
+
 
 # 测试
 if __name__=='__main__':
@@ -115,4 +144,5 @@ if __name__=='__main__':
 
     p1=producer.get_address()
     print(p1)
-    print(producer.private_key)
+    print(producer.priv_key)
+    producer.save_to_file()
