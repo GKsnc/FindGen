@@ -12,7 +12,7 @@
 """
 
 import json
-from core.block import Block
+from block import Block
 from storage.redis_storage import Redis
 from consensus.pow import ProofOfWork
 
@@ -28,7 +28,7 @@ class BlockChain:
         # self.blocks = []
 
         self.blocks = Redis()
-        self.current_hash = None
+        self.current_hash = None # TODO 当前hash
 
     def add_block(self, new_block):
         """

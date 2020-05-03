@@ -15,7 +15,7 @@ redis只做存取目的。此类作为中间件，处理redis到blockchain。
 import redis
 import json
 
-class Redis:
+class Redis(object):
     # 设置连接属性
     host = 'localhost'
     port = 6379
@@ -24,6 +24,7 @@ class Redis:
     password = None
 
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
+    # 该功能待定，未实现
     def __init__(self, Host=None, Port=None, Db=None, Password=None):
 
         # 如果传入参数，则用传入的参数修改默认属性
@@ -33,7 +34,10 @@ class Redis:
         self.password = Password if Password else self.password;
 
         # 连接数据库
-        self.rds = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
+        try:
+            self.rds = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
+        except:
+            pass
 
     # 将区块信息存入数据库,成功返回1，失败返回0
     def set(self,flag,info):  # flag可以唯一确定一个区块，info为区块信息
@@ -91,18 +95,22 @@ class Redis:
 
 # 测试
 if __name__ == '__main__':
-    #打开文件
-    with open('..\\..\\sample_block.json','r') as f:
-        txt = f.read()
-    # 连接数据库
-    con = Redis(Host='127.0.0.1',Db='0')
+    redis = Redis()
+    redis.set(1,1)
+    redis.save()
+    print(redis.keys())
+    # #打开文件
+    # with open('..\\..\\sample_block.json','r') as f:
+    #     txt = f.read()
+    # # 连接数据库
+    # con = Redis(Host='127.0.0.1',Db='0')
+    # # print(con.keys())
+    # if con.set('block1',txt):
+    #     print(con.get('block1'))
+    #     block = con.jget('block1')
+    # # print(block["Records"]["crec"]["id"])
+    # con.set('姓名','张三')
     # print(con.keys())
-    if con.set('block1',txt):
-        print(con.get('block1'))
-        block = con.jget('block1')
-    # print(block["Records"]["crec"]["id"])
-    con.set('姓名','张三')
-    print(con.keys())
-    con.delete('姓名')
-    print(con.keys())
-    # print(con.sync(ip='127.0.0.1'))
+    # con.delete('姓名')
+    # print(con.keys())
+    # # print(con.sync(ip='127.0.0.1'))

@@ -15,6 +15,7 @@ import json
 from core.adress import Participant
 from gfw.goodsid import IdWorker
 from gfw.records import Records
+from core.block import Block
 
 
 # 生成区块测试v1
@@ -56,7 +57,7 @@ def main():
     # 生产者，生成公私钥对 
     producer = Participant() # 实例化
     producer.new_keypair() # 生成公私钥对
-    producer.get_adress() # 生成地址
+    producer.get_adress() # 生成地址 # 地址的话，比特币是有加前缀的，为了标识哪一版地址 ；我这里还没弄
     producer.save_to_file() # 保存私钥
     # producer.load_to_file() # 读取私钥，构建地址
     # TODO base58;私钥，公钥，地址的编码
@@ -74,8 +75,12 @@ def main():
         record = records.new_record(i,'0x000f',producer.address) # 生成记录
         # print(record)
         # 广播（验证）；等等，不用广播，我是生产者，直接发布区块就可以了
-    # 发布区块
 
+    # 发布区块
+    # 发布前先创建区块
+    block = Block()
+    producer_block = block.new_block(record)
+    print(producer_block)
     
     # 在这里，有另一个问题，那就是惩罚机制；与之对应的是奖励机制；这里要么和比特币一样，用虚拟货币，要么，先不管了，之后再考虑吧
 

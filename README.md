@@ -8,6 +8,10 @@
 
 TODO:将程序(包括redis)打包docker(未来更新，初版程序使用CLI)  
 
+安装redis：  
+参考：<https://www.redis.com.cn/redis-installation>
+
+克隆仓库：
 ```
 git clone https://gitee.com/nksnc/FindGen.git
 ```

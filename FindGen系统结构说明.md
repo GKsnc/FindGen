@@ -162,9 +162,10 @@ TODO ： 用户认证问题，【地址模块】
 
 ### 未来更新  
 
-* 为了方便安装，将程序打包docker（两种安装方式，docker待了解）且使用web端
+* 为了方便安装，将程序打包docker（两种安装方式，docker待了解）并使用web访问的模式（B/S）
 * 多线程处理
 * 共识算法的更新
 * P2P网络模块
 * ENA13商品ID生成，优化与添加验证模块
-* 类结构调整；（Records类与Participants类等，方法权限管理）
+* 类结构调整；（Records类与Participants类；blockchain类与redis类等，方法权限管理）
+* 验证模块；上链，发布区块，接收区块，发布记录，接受记录等
