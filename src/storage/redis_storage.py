@@ -19,7 +19,6 @@ class Redis:
     # 设置连接属性
     host = '127.0.0.1'
     port = 6379
-    # db = "findgen"  # 数据库名称
     db = '0'    # 数据库名称
     password = None
 
