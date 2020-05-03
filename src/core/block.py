@@ -15,34 +15,23 @@ import hashlib
 import json
 from consensus.pow import ProofOfWork
 from gfw.records import record
+from core.blockchain import BlockChain
 # from core.transactions.transaction import Transaction 记录，记录生成程序
 
 
 version = 0x0 #区块版本号
 
-class Block(object):
+class Block(BlockChain):
     """
     区块。
-
-    block = {
-        # 区块头
-        "Version" : ""， # 四字节，区块头的版本号，用于跟踪版本和协议更新
-        "PrevBlockHash" : "", # 记录了该区块的上一个区块的Hash地址
-        "MerkleRoot" : "", # 记录了该区块中记录的merkle树根的哈希值
-        "Timestamp": datetime.now(), # 记录了该区块的创建时间戳；
-        "Height": "", # 块高
-        "Nonce": "", # 记录了用于证明工作量的计算参数
-        # 其他用于共识算法的参数，待定
-
-        # 区块体
-        "Records" : "", # 多个记录数据(多个record？)
-    }
+    详见仓库Readme和系统结构说明。
     """
 
     def __init__(self):
         self.block = dict()
+        self.pre_hash = super().current_hash
 
-    def new_block(self, records, prev_hash):
+    def new_block(self, records):
         """
         创建新区块。
         : records : 多个记录数据；数组；
@@ -54,7 +43,7 @@ class Block(object):
             "Version" : version, # 16进制int
             "TimeStamp": int(time.time()), # int
             "Records": records, # 数组
-            "PrevBlockHash": prev_hash, # 字符
+            "PrevBlockHash": self.prev_hash, # 字符
             "Nonce": 0,
             # "Height": height
         }
@@ -88,3 +77,6 @@ class Block(object):
 def new_genesis_block(coinbase):
    pass
 # 币基交易（coinbase）的存在必要性
+
+# TODO merkle树根
+# 简单的验证

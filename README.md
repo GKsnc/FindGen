@@ -6,11 +6,19 @@
 
 ### 安装
 
-todo?:将整个程序(包括redis)打包进docker(未来更新，初版程序使用本地客户端)
+TODO:将程序(包括redis)打包docker(未来更新，初版程序使用CLI)  
+
+安装redis：  
+参考：<https://www.redis.com.cn/redis-installation>
+
+克隆仓库：
+```
+git clone https://gitee.com/nksnc/FindGen.git
+```
 
 安装依赖库:
 ```
-sudo pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 安装redis
@@ -21,7 +29,8 @@ sudo pip install -r requirements.txt
 
 ### 数据结构
 
-![数据结构](https://images.gitee.com/uploads/images/2020/0329/164640_a3aebf7e_5446993.png "数据结构.png")
+[数据结构图](https://www.processon.com/view/link/5e4e3575e4b0834dd83f0454)  
+TODO 图片添加
 
 "Version" : ""，4字节，16进制int  
 "PrevBlockHash" : "", 32字节，字符，（长度，类型由hash函数确定）；验证，生成hash统一排序  
@@ -34,13 +43,25 @@ sudo pip install -r requirements.txt
 样本区块见[仓库](https://gitee.com/nksnc/FindGen/blob/master/sample_block.json)
 
 >记录（Records）：  
-> "version"：16进制int  
-> "recid"：记录编号，记录上一条记录所在（待）
-> "sign"：签名算法和验证算法来定；字符型  
-> "pub_key"：公私钥对生成算法确定；都使用（公私钥）base58加解密  
-> "crec"：字典（对象里嵌套对象）  
->>流通记录（crec）：  
->>"goods_id"：由商品id生成确定，使用字符型（未使用编码解码方式，待优化）  
->>"seq"：int  
->>"circulate_flag"：int    这个和上面那个，int型真的可以吗  
->>"time"：浮点型（精确到秒)  
+> "version"：标识记录版本  
+> "sign"：签名（由交易方签名）  
+> "pub_key"：交易方的公钥  
+> "crec"：  
+>>"goods_id"：商品ID（商品的唯一标识）
+>>"seq"：流通索引  
+>>"circulate_flag"：流通标识（生产，购买。。。）  
+>>"time"：时间戳  
+>>"recid"：记录标识符（hash）  
+>>"adress":被交易方的地址(base58)  
+
+流通标识（circulate_flag：4字节  
+生产：0x000f
+分销：0x00ff
+消费者购买：0x0fff
+商品生命结束：0xffff
+0x0000-0x000f:上链|生产|准备  
+0x000f-0x0fff：分销|插件|中间流通  
+0x0fff-0xffff留作备用
+
+TODO 列表排版  
+TODO 编写开发文档

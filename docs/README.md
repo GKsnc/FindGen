@@ -17,3 +17,7 @@
 >[blockchain-python-tutorial](https://github.com/adilmoujahid/blockchain-python-tutorial)  
 >[py-bitcoin](https://github.com/csunny/py-bitcoin)  
 >[bitcoin](https://github.com/bitcoin/bitcoin)
+
+## 废弃  
+
+![数据结构](https://images.gitee.com/uploads/images/2020/0329/164640_a3aebf7e_5446993.png "数据结构.png")

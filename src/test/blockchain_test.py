@@ -9,13 +9,13 @@
 @Author  :   ZHOU 
 """
 
-# here put the import lib
 import sys
 sys.path.append("src")
 from core.blockchain import BlockChain
 from gfw.generater.adress import Participant
 
-
+# 0427更新：这个函数，是为了理清楚整个流程
+# 现在，由于一些结构的改变，回到上一个问题，如何生成一个区块
 def main():
 
     # 首先要先下载整个区块链，p2p(或者说检查完整性？)
@@ -72,10 +72,10 @@ def main():
     BOB把公钥的哈希值提供给ALICE。公钥哈希就是大家所熟知的编码过的比特币地址，编码采用的base58进行，里面包含了一个版本序号、哈希值以及一个用来校验错误的值。
     比特币地址可能通过任何介质传播，当然也包括单向的介质，这样可以切断发款人和收款人的联系，比特币地址还可以被进一步编码成其它的格式，比如包括”bitcoion：”的二维码地址。
     '''
-
     
-    #TODO 遍历区块链，查找地址的所有记录
-    #TODO 验证
+
+    # 生产，流通，交易，验证 功能编写
+    # 见系统说明文件
 
     # 注册就是直接生成私钥就行了，然后地址
     # buyer=Participant()
@@ -104,7 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-# 一些问题：
-# 连接到本机上的redis，安全性，还有redis的安装问题 TODO(ZHOU)，存储在redis是没有加密的吗？需要加密吗？不需要，区块链设计就解决了这个问题
