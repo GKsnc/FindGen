@@ -14,7 +14,7 @@ import time
 import hashlib
 import json
 from consensus.pow import ProofOfWork
-from gfw.records import record
+from gfw import records
 from core.blockchain import BlockChain
 # from core.transactions.transaction import Transaction 记录，记录生成程序
 

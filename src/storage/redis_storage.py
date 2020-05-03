@@ -19,8 +19,6 @@ class Redis(object):
     # 设置连接属性
     host = 'localhost'
     port = 6379
-    # db = "findgen"  # 数据库名称
-    # db = 0
     password = None
 
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
@@ -29,12 +27,11 @@ class Redis(object):
         # 如果传入参数，则用传入的参数修改默认属性
         self.host = Host if Host else self.host
         self.port = Port if Port else self.port
-        # self.db = Db if Db else self.db
         self.password = Password if Password else self.password;
 
         # 连接数据库
         try:
-            self.rds = redis.StrictRedis(host=self.host, port=self.port, password=self.password)
+            self.rds = redis.StrictRedis(host=self.host, port=self.port,db=0, password=self.password)
         except:
             pass
 
@@ -77,7 +74,7 @@ class Redis(object):
         json_data = str(json_data)
         json_data = json_data.replace('[','')
         json_data = json_data.replace(']','')
-        json_data = eval(json_data)
+        json_data = eval(json_data) #注意！！！
         return json_data
 
     #主从同步(非p2p),成功返回1，失败返回0
@@ -94,18 +91,22 @@ class Redis(object):
 
 # 测试
 if __name__ == '__main__':
+    redis = Redis()
+    redis.set(1,1)
+    print(redis.get(1))
+    print(redis.keys())
     #打开文件
-    with open('..\\..\\sample_block.json','r') as f:
-        txt = f.read()
-    # 连接数据库
-    con = Redis(Host='127.0.0.1')
-    print(con.keys())
-    if con.set('block1',txt):
-        print(con.get('block1'))
-        block = con.jget('block1')
-    # print(block["Records"]["crec"]["id"])
-    con.set('姓名','张三')
-    print(con.keys())
-    con.delete('姓名')
-    print(con.keys())
-    # print(con.sync(ip='127.0.0.1'))
+    # with open('..\\..\\sample_block.json','r') as f:
+    #     txt = f.read()
+    # # 连接数据库
+    # con = Redis(Host='127.0.0.1')
+    # print(con.keys())
+    # if con.set('block1',txt):
+    #     print(con.get('block1'))
+    #     block = con.jget('block1')
+    # # print(block["Records"]["crec"]["id"])
+    # con.set('姓名','张三')
+    # print(con.keys())
+    # con.delete('姓名')
+    # print(con.keys())
+    # # print(con.sync(ip='127.0.0.1'))

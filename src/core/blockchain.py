@@ -12,12 +12,11 @@
 """
 
 import json
-from block import Block
 from storage.redis_storage import Redis
 from consensus.pow import ProofOfWork
 
 
-class BlockChain:
+class BlockChain(object):
     """
     区块链。
     核心，对区块链的存取，查询等操作。
@@ -28,7 +27,7 @@ class BlockChain:
         # self.blocks = []
 
         self.blocks = Redis()
-        self.current_hash = None # TODO 当前hash
+        self.current_hash = self.blocks.get('L') # TODO 当前hash
 
     def add_block(self, new_block):
         """

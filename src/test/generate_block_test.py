@@ -16,6 +16,7 @@ from core.adress import Participant
 from gfw.goodsid import IdWorker
 from gfw.records import Records
 from core.block import Block
+from core.blockchain import BlockChain
 
 
 # 生成区块测试v1
@@ -46,6 +47,7 @@ def testv1():
 # 0427 开始最后的“大”更新
 def main():
     """
+    在生成区块前，需要有区块链。
     生成区块。
     第一步，需要有参与方；三方，生产者，交易方，被交易方。
     第二步，商品；由生产者生成商品ID，并发布出去。
@@ -78,9 +80,16 @@ def main():
 
     # 发布区块
     # 发布前先创建区块
+    # TODO 创世区块的创建
+    findgen = BlockChain()
     block = Block()
-    producer_block = block.new_block(record)
+    producer_block = block.new_block(record) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
     print(producer_block)
+    # 区块，区块链，这是不能分开看的；
+    # 要发布区块，首先要有区块链
+    # 而区块链，就要有同步，验证，创建的功能
+    # 创建区块链后（也就是生成创世区块或网络同步）后，才能生成区块与发布区块
+    # 所以生成区块链，放在一开始
     
     # 在这里，有另一个问题，那就是惩罚机制；与之对应的是奖励机制；这里要么和比特币一样，用虚拟货币，要么，先不管了，之后再考虑吧
 
