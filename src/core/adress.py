@@ -120,7 +120,7 @@ class Participant(object):
             priv_key=str(priv_key)
         with open(WalletFile, 'w') as f:
             pri_dict = {
-                'PrivateKey':base58decode(priv_key)
+                'PrivateKey':base58encode(priv_key)
             }
             f.write(json.dumps(pri_dict)+'\n')
     
@@ -130,7 +130,8 @@ class Participant(object):
         with open(WalletFile, 'r') as f:
             for line in f.readlines():
                 line_dict = json.loads(line)
-                priv_key = line_dict['PrivateKey']
+                print(base58encode(line_dict['PrivateKey']))
+                #priv_key = int()
         pub_key = keys.get_public_key(priv_key, curve.P256)
         pub_key = "".join([str(pub_key.x), str(pub_key.y)])
         self.priv_key = priv_key

@@ -15,7 +15,7 @@ import json
 import time
 from fastecdsa import ecdsa
 
-version=0x0001 # 记录版本（流通规则）
+version='0x0001' # 记录版本（流通规则）
 
 class Records(object):
     """
@@ -23,14 +23,14 @@ class Records(object):
     记录：记录头+流通记录。详见仓库数据结构。
     """
 
-    def __init__(self,pri_key, pub_key):
+    def __init__(self,priv_key, pub_key):
         """
         :param pri_key: 参与者私钥
         :param pub_key: 参与者公钥
         #TODO 使用公私钥地址等，统一使用一个对象（参与者）？类
         """
         self.version=version
-        self.pri_key=pri_key
+        self.priv_key=priv_key
         self.pub_key=pub_key
 
     def new_record(self,id,circulate_flag,adress,precord=[]):
@@ -43,7 +43,7 @@ class Records(object):
         """
         record = dict()
         #生产记录
-        if circulate_flag==0x000f:
+        if circulate_flag=='0x000f':
             crec={
                 'goods_id':id,
                 'seq':0,
@@ -54,8 +54,8 @@ class Records(object):
             record['crec']=crec
             record['version']=self.version
             record['pub_key']=self.pub_key
-            record['recid']=hashlib.sha256(self.serialize(record)).hexdigest() # hash记录，成为交易标识
-            record['sign']=self.sign(self.pri_key,record)
+            record['recid']=hashlib.sha256(self.serialize(record).encode()).hexdigest() # hash记录，成为交易标识
+            record['sign']=self.sign(self.priv_key,record)
             return record
         
         # 交易记录
@@ -74,7 +74,7 @@ class Records(object):
         return record
 
     # 创建流通记录
-    def new_circulate_record(self, id,circulate_flag,adress,seq):
+    def __new_circulate_record(self, id,circulate_flag,adress,seq):
         """
         创建一条流通记录。
 
@@ -129,7 +129,7 @@ class Records(object):
         #序列化记录。
         # :return: 返回json
         """
-        return json.dumps(record,sort_keys=True)
+        return json.dumps(record,sort_keys=True) # 返回的是str；dumps是将dict转str返回
 
     def vertify(self,record):
         """
@@ -147,6 +147,7 @@ class Records(object):
         pass
 
     # 全局流通规则验证
+    #TODO(ZHOU) 规则编写；初步的三条规则，进一步，需要什么，等需要什么，在编写。
     def valid_crec(self,pre_crec):
         """
         GFW模型规则检查。
@@ -167,14 +168,12 @@ class Records(object):
             # 不满足规则，这条记录就不符合规范
             return False
 
-#TODO(ZHOU) 规则编写；初步的三条规则，进一步，需要什么，等需要什么，在编写。
-
-
 
 # 测试
 if __name__=='__main__':
-    # 生成公钥私钥对 
-    rec=Records(0xe750c03ec430596c40000,55248630652735703223152638700518970040653913471915361658953299428523546807998,5647229235116611234207182631713135971966847906144383840806022238380289234910871917806701283430577159806922743362718786414358965919409008443583248119700767)
-    a=rec.new_record(0x0)
-
-# TODO(ZHOU) 公私钥对的使用,保存方式
+    # 生成公钥私钥对
+    # 公私钥用base58表示，传入时就解密
+    rec=Records(55248630652735703223152638700518970040653913471915361658953299428523546807998,5647229235116611234207182631713135971966847906144383840806022238380289234910871917806701283430577159806922743362718786414358965919409008443583248119700767)
+    a=rec.new_record('0x71561f03ec430596c40002','0x000f',1) # 16进制整型好，还是16进制字符串好 # 选择字符串
+    # 16进制字符hex，16进制字符转整型，int(n,16)
+    print(a)

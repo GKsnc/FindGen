@@ -5,7 +5,7 @@
 生成商品地址（商品ID）。
 
 利用雪花算法。划分包括时间戳，商品编码，序列号
-商品编码52bit（13位十进制数,还未实现），秒级时间戳（32位），序列号（20bit)
+商品编码52bit（目前采用的十进制，编码空间有浪费），秒级时间戳（32位），序列号（20bit)
 
 @File    :   generate_id.py
 @Time    :   2020/02/06 17:17:06
@@ -68,7 +68,7 @@ class IdWorker(object):
     def get_id(self):
         """
         获取新ID
-        :return:
+        :return: 单个id,16进制
         """
         timestamp = self._gen_timestamp()
 
@@ -87,7 +87,7 @@ class IdWorker(object):
         self.last_timestamp = timestamp
 
         new_id = ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT) | (self.EAN_13 << EAN_13_SHIFT) | self.sequence
-        return new_id
+        return hex(new_id)
 
     def _til_next_millis(self, last_timestamp):
         """
@@ -98,6 +98,18 @@ class IdWorker(object):
             timestamp = self._gen_timestamp()
         return timestamp
 
+    # 批量生成id，返回元组
+    def get_ids(self, n):
+        """
+        批量生成id.
+        :param n: 要生成的个数。
+        :return : 返回包含n个id的元组。
+        """
+        ids = list()
+        for i in range(n):
+            ids.append(self.get_id())
+        return tuple(ids)
+
 
 class InvalidSystemClock(Exception):
     """
@@ -107,7 +119,5 @@ class InvalidSystemClock(Exception):
 
 # 测试
 if __name__ == '__main__':
-    worker = IdWorker(69012345678912,0) 
-    print(hex(worker.get_id())) # 16进制显示输出
-
-# 商品ID是否混淆（哈希）？
+    worker = IdWorker(69012345678912,0)
+    print(worker.get_ids(10))
