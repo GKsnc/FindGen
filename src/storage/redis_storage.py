@@ -19,22 +19,22 @@ class Redis(object):
     # 设置连接属性
     host = 'localhost'
     port = 6379
-    db = "findgen"  # 数据库名称
+    # db = "findgen"  # 数据库名称
     # db = 0
     password = None
 
     # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
-    def __init__(self, Host=None, Port=None, Db=None, Password=None):
+    def __init__(self, Host=None, Port=None, Password=None):
 
         # 如果传入参数，则用传入的参数修改默认属性
         self.host = Host if Host else self.host
         self.port = Port if Port else self.port
-        self.db = Db if Db else self.db
+        # self.db = Db if Db else self.db
         self.password = Password if Password else self.password;
 
         # 连接数据库
         try:
-            self.rds = redis.StrictRedis(host=self.host, port=self.port, db=self.db, password=self.password)
+            self.rds = redis.StrictRedis(host=self.host, port=self.port, password=self.password)
         except:
             pass
 
@@ -98,8 +98,8 @@ if __name__ == '__main__':
     with open('..\\..\\sample_block.json','r') as f:
         txt = f.read()
     # 连接数据库
-    con = Redis(Host='127.0.0.1',Db='0')
-    # print(con.keys())
+    con = Redis(Host='127.0.0.1')
+    print(con.keys())
     if con.set('block1',txt):
         print(con.get('block1'))
         block = con.jget('block1')
