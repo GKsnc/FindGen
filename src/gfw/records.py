@@ -40,6 +40,7 @@ class Records(object):
         :param circulate_flag: 16进制，流通标识详见README。
         :param adress: 标准地址.
         :param precord: 根据商品ID或交易标识（recid）查找的之前的记录。
+        :return :返回json字符。
         """
         record = dict()
         #生产记录
@@ -56,7 +57,7 @@ class Records(object):
             record['pub_key']=self.pub_key
             record['recid']=hashlib.sha256(self.serialize(record).encode()).hexdigest() # hash记录，成为交易标识
             record['sign']=self.sign(self.priv_key,record)
-            return record
+            return json.dumps(record)
         
         # 交易记录
         crec = dict()
@@ -71,7 +72,7 @@ class Records(object):
         record['recid'] = precord[-1]['recid']
         record['sign'] = self.sign(self.pri_key,record)
         
-        return record
+        return json.dumps(record) 
 
     # 创建流通记录
     def __new_circulate_record(self, id,circulate_flag,adress,seq):

@@ -74,6 +74,7 @@ class BlockChain(object):
         genesis_block = {
             "Version" : '0x0', # 16进制int
             "TimeStamp": int(time.time()), # int
+            "MerkleRoot":'0x0',
             "Records": list(), # 数组
             "PrevBlockHash": '0x0', # 字符
             "Nonce": 0,

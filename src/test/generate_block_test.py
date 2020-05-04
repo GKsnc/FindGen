@@ -80,12 +80,16 @@ def main():
         pro_record = records.new_record(i,'0x000f',producer.address) # 生成记录
         # print(record)
         # 广播（验证）；等等，不用广播，我是生产者，直接发布区块就可以了
-
+    
+    mine_records = list()
+    mine_records.append(pro_record)
     # 发布区块
     # 发布前先创建区块
     block = Block(findgen.current_hash)
     # TODO 区块生成的Merkel补充
-    producer_block = block.new_block(pro_record) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
+    print(mine_records)
+    print(type(pro_record))
+    producer_block = block.new_block(mine_records) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
     print(producer_block)
     # 区块，区块链，这是不能分开看的；
     # 要发布区块，首先要有区块链

@@ -11,14 +11,14 @@
 
 import sys
 sys.path.append("src")
-from pow import ProofOfWork
-from blockchain.block import Block
+from consensus.pow import ProofOfWork
+from core.block import Block
 
 
 if __name__ == '__main__':
-    b = Block()
+    b = Block('0x0')
 
-    genesis_block = b.new_block({}, "")
+    genesis_block = b.new_block(['0x0'])
 
-    pow = ProofOfWork(genesis_block)
+    pow = ProofOfWork(genesis_block[1])
     pow.run()

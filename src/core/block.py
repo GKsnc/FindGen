@@ -45,6 +45,7 @@ class Block(BlockChain):
         block = {
             "Version" : version, # 16进制int
             "TimeStamp": int(time.time()), # int
+            "MerkleRoot":'0x0',
             "Records": records, # 数组
             "PrevBlockHash": self.prev_hash, # 字符
             "Nonce": 0,

@@ -11,10 +11,10 @@
 
 import hashlib
 from settings import maxNonce, targetBits
-# from utils.merkletree import MerkleTree
+from utils.merkletree import MerkleTree
 
 
-class ProofOfWork:
+class ProofOfWork(object):
     """
     工作量证明算法
     """
@@ -34,8 +34,9 @@ class ProofOfWork:
         :return:
         """
 
-        tree = MerkleTree(self.block["Transactions"])
+        tree = MerkleTree(self.block["Records"])
         tree.new_tree()
+        self.block['MerkleRoot'] = tree.root.data
 
         return tree.root.data
 
@@ -49,7 +50,7 @@ class ProofOfWork:
 
         data = "".join([
             self.block["PrevBlockHash"],
-            # self.hash_txs()   #Merkle树
+            self.hash_txs(),   #Merkle树
             timestamp,
             hex(targetBits),
             hex(self.nonce)
