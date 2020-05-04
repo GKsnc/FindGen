@@ -16,7 +16,7 @@ from core.adress import Participant
 
 # 0427更新：这个函数，是为了理清楚整个流程
 # 现在，由于一些结构的改变，回到上一个问题，如何生成一个区块
-def main():
+def test_1():
 
     # 首先要先下载整个区块链，p2p(或者说检查完整性？)
 
@@ -101,6 +101,17 @@ def main():
     # 商品只有一条线，直接指向那个区块或者记录编号（记录的hash）不好吗，不是
     # 第一步找到所有商品的未完成输出（找的话，就直接利用标识了前一个记录的标识来找），第二步，使用商品发布新的区块（验证，一条条向前验证，成功就接受区块
     # 结束
+
+def main():
+    findgen = BlockChain()
+    # print(findgen.print_blockchain())
+    while True:
+        print(findgen.current_hash)
+        try:
+            block = next(findgen.iterator())
+        except:
+            break
+        print(block)
 
 if __name__ == "__main__":
     main()

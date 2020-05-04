@@ -21,7 +21,7 @@ class MerkleTree(object):
     def __init__(self, data):
         if not isinstance(data, list):
             raise TypeError("data must be a bytes list")
-
+        
         if not data:
             raise ValueError("记录不能为空！")
 

@@ -91,6 +91,7 @@ def main():
     print(type(pro_record))
     producer_block = block.new_block(mine_records) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
     print(producer_block)
+    findgen.add_block(producer_block[0],producer_block[1])
     # 区块，区块链，这是不能分开看的；
     # 要发布区块，首先要有区块链
     # 而区块链，就要有同步，验证，创建的功能
@@ -104,6 +105,13 @@ def main():
     # normal_record = records.new_record(ids[0],'0x0fff') # 将生成的0号商品，发给被交易方
     # 问题；验证，不能发给自己，还有检索之前的记录验证是否违背流通规则
     # 其他验证，签名验证等
+    middle_p = Participant()
+    middle_p.new_keypair()
+    middle_p.get_adress()
+    # 检索之前的区块，找出所有的交易，商品ID，交易hash
+    #urc = findgen.find_urc()
+    #print(urc)
+    #normal_record = records.new_record(ids[0],'0x0fff',middle_p.address)
 
     # 收揽的记录，形成区块，发布出去。为了防止，内容有误，自然的先验证，在添加到区块，最后发布出去，
 
@@ -121,7 +129,7 @@ def main():
     # 二。区块的创建
         # Merkel
     # 三。普通流通记录的创建
-        # 简单的验证
+        # 简单的验证（放弃，之后统一做）
         # 检索区块
     # （区块的发布，网络模块）
     # 文档的编写

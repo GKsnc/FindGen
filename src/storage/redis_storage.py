@@ -37,14 +37,26 @@ class Redis(object):
     def set(self,flag,info):  # flag可以唯一确定一个区块，info为区块信息
         """
         :param flag:区块hash
-        :param info：区块
+        :param info：区块(json,字符)
         """
         # info = json.load(info)
         try:
-            self.rds.set(flag, info,nx=True) # 不存在时，执行set
+            self.rds.set(flag, info)
             return 1
         except:
-            return 0
+            raise ValueError('区块存入失败！')
+    
+    def jset(self,flag,info):
+        '''
+        :param flag:区块hash
+        :param info：区块(python数据对象)
+        '''
+        info = json.dumps(info)
+        try:
+            self.rds.set(flag, info)
+            return 1
+        except:
+            raise ValueError('区块存入失败！')
 
     # 获取指定key值的value值，value为json字符串
     def get(self, key):
@@ -64,15 +76,13 @@ class Redis(object):
 
     #将key对应的已编码的json字符串解析为字典对象返回
     def jget(self,key):
+        '''
+        存入是json字符串，返回解析为python对象的区块。
+        '''
         #获取key对应的json字符串
         data = self.rds.get(key)
         #将key对应的son字符串解码为字典对象
         json_data = json.loads(data)
-        #信息提取
-        json_data = str(json_data)
-        json_data = json_data.replace('[','')
-        json_data = json_data.replace(']','')
-        json_data = eval(json_data) #注意！！！
         return json_data
 
     #主从同步(非p2p),成功返回1，失败返回0
@@ -91,6 +101,7 @@ class Redis(object):
 if __name__ == '__main__':
     redis = Redis()
     redis.set(1,1)
+    redis.set(2,2)
     print(redis.get(1))
     print(redis.keys())
     #打开文件

@@ -40,21 +40,21 @@ class BlockChain(object):
         # 由于网络模块尚未完成，同步，读取；未来更新
         # 读取数据库，进行判断，是否有区块链
         # 创世区块的创建
-        blocks = Redis()
+        self.blocks = Redis()
         # 判断是否有最后一个区块，没有则开始创建区块
         # 因为数据库中存储的是区块，不一定有L
         # 所以得判断，是否有区块链，
         # 可以用创世区块
         # 如果数据库为空则创世区块？
         # 创世区块编入到程序内
-        if blocks.rds.exists('L'):
-            self.current_hash = blocks.get('L')
+        if self.blocks.rds.exists('L'):
+            self.current_hash = self.blocks.get('L')
             return True
-        elif blocks.rds.keys():
-            blocks.rds.flushdb() # 清空当前（0号）数据库；这里待网络模块完成，再做更改
+        elif self.blocks.rds.keys():
+            self.blocks.rds.flushdb() # 清空当前（0号）数据库；这里待网络模块完成，再做更改
 
-        self.blocks = blocks
         self.__genesis_block()
+        self.current_hash = self.blocks.get('L')
         # 网络同步
         # 数据库什么都没有
         # 则，开始读取创世区块，并开始运行网络模块
@@ -77,14 +77,15 @@ class BlockChain(object):
             "MerkleRoot":'0x0',
             "Records": list(), # 数组
             "PrevBlockHash": '0x0', # 字符
-            "Nonce": 0,
+            "Nonce": 0
         }
+        genesis_block['Records'].append('0')
         pow = ProofOfWork(genesis_block)
         b_hash, nonce = pow.run()
         genesis_block["Nonce"] = nonce
-        self.add_block(genesis_block,b_hash)
+        self.add_block(b_hash,genesis_block)
 
-    def add_block(self, new_block, b_hash):
+    def add_block(self, b_hash, new_block):
         """
         添加block到链上
         :param new_block:
@@ -96,7 +97,10 @@ class BlockChain(object):
         if pow.validate(): # TODO(ZHOU) 了解如何验证合法性(validate)
             # self.blocks.append(new_block)
             if not self.blocks.get(b_hash): # 不能有相同hash加入
-                self.blocks.set(b_hash, new_block)
+                if isinstance(new_block,str):
+                    self.blocks.set(b_hash, new_block)
+                else:
+                    self.blocks.jset(b_hash, new_block)
                 self.blocks.set("L", b_hash)
 
     def get_block(self, block_hash):
@@ -135,9 +139,9 @@ class BlockChain(object):
                 break     # 程序退出边界条件
 
             for rc in last_block["Records"]:
-                rc_json = json.loads(rc.decode())
+                rc_json = json.loads(rc)
                 urc[rc_json["goods_id"]] = []
-                urc[rc_json["ID"]].append(rc_json['crec'])       
+                urc[rc_json["ID"]].append(rc_json['crec'])  
 
         return urc
 
@@ -146,11 +150,14 @@ class BlockChain(object):
         if not self.current_hash:
             self.current_hash = self.blocks.get("L")
 
-        last_block = self.blocks.get(self.current_hash).decode() #为什么要decode？
+        try:
+            last_block = self.blocks.jget(self.current_hash)
+        except:
+            raise StopIteration
 
-        if eval(last_block)["PrevBlockHash"]: # 这个eval会有漏洞吗，需注意一下
-            self.current_hash = eval(last_block)["PrevBlockHash"]
-            yield eval(last_block)
+        if last_block["PrevBlockHash"]:
+            self.current_hash = last_block["PrevBlockHash"]
+            yield last_block
 
     def find_rc(self, gid):
         """
@@ -179,6 +186,24 @@ class BlockChain(object):
                     return rc
 
             return "未找到交易信息"
+
+    def print_blockchain(self):
+        """
+        输出blockchain
+
+        :return:
+        """
+        # for b in self.blocks:
+        #     print(b)
+
+        blocks = []
+
+        for b in self.blocks.keys():
+            print(b)
+            if b != 'L':
+                v = self.blocks.get(b)
+                blocks.append(v)
+        return blocks
 
 
 if __name__ == "__main__":
