@@ -109,8 +109,8 @@ def main():
     middle_p.new_keypair()
     middle_p.get_adress()
     # 检索之前的区块，找出所有的交易，商品ID，交易hash
-    #urc = findgen.find_urc()
-    #print(urc)
+    urc = findgen.find_urc()
+    print(urc)
     #normal_record = records.new_record(ids[0],'0x0fff',middle_p.address)
 
     # 收揽的记录，形成区块，发布出去。为了防止，内容有误，自然的先验证，在添加到区块，最后发布出去，

@@ -121,34 +121,37 @@ class BlockChain(object):
         while True:
             try:
                 last_block = next(self.iterator())
-            except StopIteration:
-                genesis_hash = self.blocks.get(self.current_hash).decode()
-                last_block = eval(genesis_hash)
+            except: # 此处依靠创世区块来编写
+                # genesis_hash = self.blocks.get(self.current_hash).decode()
+                # last_block = eval(genesis_hash)
 
-                coinbase_tx = last_block["Transactions"]
-                for tx in coinbase_tx:
+                # coinbase_tx = last_block["Transactions"]
+                # for tx in coinbase_tx:
 
-                    rc_json = json.loads(tx.decode())
+                #     rc_json = json.loads(tx.decode())
 
-                    urc[rc_json["ID"]] = []
+                #     urc[rc_json["ID"]] = []
 
-                    for out in rc_json["Vout"]:
-                        if not spent_tx[rc_json["ID"]]:
-                            urc[rc_json["ID"]].append(out)
-
+                #     for out in rc_json["Vout"]:
+                #         if not spent_tx[rc_json["ID"]]:
+                #             urc[rc_json["ID"]].append(out)
                 break     # 程序退出边界条件
+
+            if self.current_hash == '0x0':
+                break # 这里处理的不是很好，之后视创世区块改变
 
             for rc in last_block["Records"]:
                 rc_json = json.loads(rc)
-                urc[rc_json["goods_id"]] = []
-                urc[rc_json["ID"]].append(rc_json['crec'])  
+                urc[rc_json['crec']["goods_id"]] = []
+                urc[rc_json['crec']["goods_id"]].append(rc_json['crec'])
 
-        return urc
+        return urc # TODO 存储到数据库中，缓存，未来更新
 
     def iterator(self):
         # 创世区块的迭代？
         if not self.current_hash:
             self.current_hash = self.blocks.get("L")
+        
 
         try:
             last_block = self.blocks.jget(self.current_hash)
