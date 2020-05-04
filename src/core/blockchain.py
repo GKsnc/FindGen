@@ -12,6 +12,7 @@
 """
 
 import json
+import time
 from storage.redis_storage import Redis
 from consensus.pow import ProofOfWork
 
@@ -26,10 +27,63 @@ class BlockChain(object):
         # 然后再存储在redis
         # self.blocks = []
 
-        self.blocks = Redis()
-        self.current_hash = self.blocks.get('L') # TODO 当前hash
+        # self.blocks = Redis()
+        # self.current_hash = self.blocks.get('L') # TODO 当前hash
+        self.__initial_blockchain()
 
-    def add_block(self, new_block):
+    def __initial_blockchain(self):
+        '''
+        初始化区块链。
+        没有，则创建。
+        有，则进行同步与读取。
+        '''
+        # 由于网络模块尚未完成，同步，读取；未来更新
+        # 读取数据库，进行判断，是否有区块链
+        # 创世区块的创建
+        blocks = Redis()
+        # 判断是否有最后一个区块，没有则开始创建区块
+        # 因为数据库中存储的是区块，不一定有L
+        # 所以得判断，是否有区块链，
+        # 可以用创世区块
+        # 如果数据库为空则创世区块？
+        # 创世区块编入到程序内
+        if blocks.rds.exists('L'):
+            self.current_hash = blocks.get('L')
+            return True
+        elif blocks.rds.keys():
+            blocks.rds.flushdb() # 清空当前（0号）数据库；这里待网络模块完成，再做更改
+
+        self.blocks = blocks
+        self.__genesis_block()
+        # 网络同步
+        # 数据库什么都没有
+        # 则，开始读取创世区块，并开始运行网络模块
+        # 此处也需要认证
+        # TODO 网络模块完成后，此处必须改变；存在隐患
+        # 比如直接读取创世区块
+        
+        # redis存取的是区块链，如果网络同步后，建立键值对，需要hash作为键
+    
+    # 创世区块
+    # 当一切都完成后，固定创世区块，这个方法也将删除，目前做测试使用
+    def __genesis_block(self):
+        '''
+        创世区块。
+        完成后，将区块，硬编码进程序。
+        '''
+        genesis_block = {
+            "Version" : '0x0', # 16进制int
+            "TimeStamp": int(time.time()), # int
+            "Records": list(), # 数组
+            "PrevBlockHash": '0x0', # 字符
+            "Nonce": 0,
+        }
+        pow = ProofOfWork(genesis_block)
+        b_hash, nonce = pow.run()
+        genesis_block["Nonce"] = nonce
+        self.add_block(genesis_block,b_hash)
+
+    def add_block(self, new_block, b_hash):
         """
         添加block到链上
         :param new_block:
@@ -40,9 +94,9 @@ class BlockChain(object):
         pow = ProofOfWork(new_block, new_block["Nonce"])
         if pow.validate(): # TODO(ZHOU) 了解如何验证合法性(validate)
             # self.blocks.append(new_block)
-            if not self.blocks.get(new_block["Hash"]): # 不能有相同hash加入
-                self.blocks.set(new_block["Hash"], new_block)
-                self.blocks.set("L", new_block["Hash"])
+            if not self.blocks.get(b_hash): # 不能有相同hash加入
+                self.blocks.set(b_hash, new_block)
+                self.blocks.set("L", b_hash)
 
     def get_block(self, block_hash):
         block = self.blocks.get(block_hash)
@@ -126,58 +180,5 @@ class BlockChain(object):
             return "未找到交易信息"
 
 
-    # def get_height(self):
-    #     last_hash = self.blocks.get("l")
-    #     last_block = self.blocks.get(last_hash).decode()
-
-    #     return eval(last_block)["Height"]
-
-
-    # def all_hashes(self):
-
-    #     return [b for b in self.blocks.keys() if b != 'l']
-
-    # def mine_block(self, transactions):
-
-    #     """
-    #     根据链上的最后一个区块的hash值，生成一个新的block
-    #     :param transactions:
-    #     :return:
-    #     """
-    #     lash_hash = self.blocks.get("l").decode()
-    #     height = self.get_height()
-    #     b = Block()
-    #     new_block = b.new_block(transactions, lash_hash, height + 1)
-    #     return new_block
-
-    # def sign_transaction(self, tx):
-    #     """
-    #     交易信息加密
-    #     :return:
-    #     """
-    #     pass
-
-    # def verify_transaction(self, tx):
-    #     """
-    #     交易信息解密
-    #     :return:
-    #     """
-    #     pass
-
-    # def print_blockchain(self):
-    #     """
-    #     输出blockchain
-
-    #     :return:
-    #     """
-    #     # for b in self.blocks:
-    #     #     print(b)
-
-    #     blocks = []
-
-    #     for b in self.blocks.keys():
-
-    #         if b.decode() != 'l':
-    #             v = self.blocks.get(b).decode()
-    #             blocks.append(eval(v))
-    #     return blocks
+if __name__ == "__main__":
+    bc_test = BlockChain()

@@ -12,7 +12,7 @@
 import sys
 sys.path.append("src")
 from core.blockchain import BlockChain
-from gfw.generater.adress import Participant
+from core.adress import Participant
 
 # 0427更新：这个函数，是为了理清楚整个流程
 # 现在，由于一些结构的改变，回到上一个问题，如何生成一个区块
@@ -25,7 +25,7 @@ def main():
 
 
     # 然后实例化区块链
-    #findgen_chain=BlockChain() # 区块链的一些参数，也在这一步完成，版本之类的
+    findgen_chain=BlockChain() # 区块链的一些参数，也在这一步完成，版本之类的
 
     # 以上，初始化完成
 

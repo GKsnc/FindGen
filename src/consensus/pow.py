@@ -80,7 +80,7 @@ class ProofOfWork:
         data = self.prepare_data()
         hash_v = hashlib.sha256(data.encode('utf-8')).hexdigest()
 
-        print(int(hash_v, 16), self.target)
+        # print(int(hash_v, 16), self.target) # TODO 这是个什么验证？
 
         if int(hash_v, 16) <= self.target:
             return True

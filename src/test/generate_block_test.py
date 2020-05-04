@@ -56,6 +56,9 @@ def main():
     第五步，接收区块，验证。
     """
 
+    # （创建，同步，读取）区块链
+    findgen = BlockChain()
+
     # 生产者，生成公私钥对 
     producer = Participant() # 实例化
     producer.new_keypair() # 生成公私钥对
@@ -74,16 +77,15 @@ def main():
 
     records = Records(producer.priv_key,producer.pub_key) # 实例化
     for i in ids:
-        record = records.new_record(i,'0x000f',producer.address) # 生成记录
+        pro_record = records.new_record(i,'0x000f',producer.address) # 生成记录
         # print(record)
         # 广播（验证）；等等，不用广播，我是生产者，直接发布区块就可以了
 
     # 发布区块
     # 发布前先创建区块
-    # TODO 创世区块的创建
-    findgen = BlockChain()
-    block = Block()
-    producer_block = block.new_block(record) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
+    block = Block(findgen.current_hash)
+    # TODO 区块生成的Merkel补充
+    producer_block = block.new_block(pro_record) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
     print(producer_block)
     # 区块，区块链，这是不能分开看的；
     # 要发布区块，首先要有区块链
@@ -95,6 +97,9 @@ def main():
 
     # 交易，发布也没有特别严格的验证；
     # 有地址后，直接发给地址，然后发布就行
+    # normal_record = records.new_record(ids[0],'0x0fff') # 将生成的0号商品，发给被交易方
+    # 问题；验证，不能发给自己，还有检索之前的记录验证是否违背流通规则
+    # 其他验证，签名验证等
 
     # 收揽的记录，形成区块，发布出去。为了防止，内容有误，自然的先验证，在添加到区块，最后发布出去，
 
@@ -105,6 +110,17 @@ def main():
     # 查找区块，显示商品ID的交易记录
 
     # 结束
+
+    # TODO 最后的任务
+    # 一。区块链的创建
+        # init_blockchain
+    # 二。区块的创建
+        # Merkel
+    # 三。普通流通记录的创建
+        # 简单的验证
+        # 检索区块
+    # （区块的发布，网络模块）
+    # 文档的编写
     
 
 if __name__ == "__main__":

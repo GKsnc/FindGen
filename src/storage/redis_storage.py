@@ -5,7 +5,7 @@
 区块信息的存储与查询。
 
 使用前电脑需要安装redis数据库，使用第三方库redis。
-redis只做存取目的。此类作为中间件，处理redis到blockchain。
+程序中遍历区块链所产生的数据，也存放到redis中。（不同数据库）
 
 @Time    :   2020/02/5
 @Author  :   Kang
@@ -21,19 +21,17 @@ class Redis(object):
     port = 6379
     password = None
 
-    # 连接数据库，可以传入参数设置连接属性，无参数传入则连接本机数据库
-    def __init__(self, Host=None, Port=None, Password=None):
-
+    # 默认连接0号数据库，有其他需求创建新的实例。
+    def __init__(self, Host=None, db=0, Port=None, Password=None):
         # 如果传入参数，则用传入的参数修改默认属性
         self.host = Host if Host else self.host
         self.port = Port if Port else self.port
         self.password = Password if Password else self.password;
-
         # 连接数据库
         try:
-            self.rds = redis.StrictRedis(host=self.host, port=self.port,db=0, password=self.password)
+            self.rds = redis.StrictRedis(host=self.host, port=self.port,db=db, password=self.password,decode_responses=True)
         except:
-            pass
+            pass # 连接失败的报错提示,看下redis会报什么错
 
     # 将区块信息存入数据库,成功返回1，失败返回0
     def set(self,flag,info):  # flag可以唯一确定一个区块，info为区块信息
@@ -43,7 +41,7 @@ class Redis(object):
         """
         # info = json.load(info)
         try:
-            self.rds.set(flag, info)
+            self.rds.set(flag, info,nx=True) # 不存在时，执行set
             return 1
         except:
             return 0

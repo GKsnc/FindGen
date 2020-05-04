@@ -19,7 +19,7 @@ from core.blockchain import BlockChain
 # from core.transactions.transaction import Transaction 记录，记录生成程序
 
 
-version = 0x0 #区块版本号
+version = '0x0' #区块版本号
 
 class Block(BlockChain):
     """
@@ -27,9 +27,12 @@ class Block(BlockChain):
     详见仓库Readme和系统结构说明。
     """
 
-    def __init__(self):
+    def __init__(self,current_hash):
+        '''
+        :param current_hash:区块链最后一个区块的hash
+        '''
         self.block = dict()
-        self.pre_hash = super().current_hash
+        self.prev_hash = current_hash
 
     def new_block(self, records):
         """
@@ -37,7 +40,7 @@ class Block(BlockChain):
         : records : 多个记录数据；数组；
         : pre_hash : 上一个区块的Hash地址；字符串；
         : height : 块高；已删除；
-        : return : 返回区块。
+        : return : 返回区块与该区块的hash。
         """
         block = {
             "Version" : version, # 16进制int
@@ -52,11 +55,10 @@ class Block(BlockChain):
         pow = ProofOfWork(block)
 
         b_hash, nonce = pow.run()
-        block["Hash"] = b_hash
         block["Nonce"] = nonce
 
         self.block = block
-        return block
+        return b_hash,block
 
     def set_hash(self, block):
         """
