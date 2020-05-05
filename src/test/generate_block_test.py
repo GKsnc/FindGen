@@ -124,7 +124,7 @@ def main():
     print('挖出的区块为：')
     print(normal_block)
     findgen.add_block(normal_block[0],normal_block[1])
-
+    
     # 收揽的记录，形成区块，发布出去。为了防止，内容有误，自然的先验证，在添加到区块，最后发布出去，
 
     # 接受到区块后，进行验证。

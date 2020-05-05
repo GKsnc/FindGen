@@ -112,6 +112,7 @@ def main():
         except:
             break
         print(block)
+    findgen.block2json_dump(findgen.blocks.get('L'))
 
 if __name__ == "__main__":
     main()

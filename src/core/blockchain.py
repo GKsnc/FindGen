@@ -104,9 +104,9 @@ class BlockChain(object):
                 self.blocks.set("L", b_hash)
 
     def get_block(self, block_hash):
-        block = self.blocks.get(block_hash)
+        block = self.blocks.jget(block_hash)
         if block:
-            return eval(block.decode)
+            return block
 
         else:
             return "区块不存在"
@@ -207,6 +207,14 @@ class BlockChain(object):
                 v = self.blocks.get(b)
                 blocks.append(v)
         return blocks
+
+    def block2json_dump(self,block_hash):
+        block = self.get_block(block_hash)
+        # block['Records'] = json.loads(block['Records'])
+        block['Records'] = list(map(json.loads,block['Records']))
+        with open('block.json','w') as f:
+            print('\n区块写入文件...\n')
+            json.dump(block,f,indent=4,separators=(',',':'))
 
 
 if __name__ == "__main__":
