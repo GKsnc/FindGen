@@ -64,14 +64,9 @@ def main():
     producer.new_keypair() # 生成公私钥对
     producer.get_adress() # 生成地址 # 地址的话，比特币是有加前缀的，为了标识哪一版地址 ；我这里还没弄
     producer.save_to_file() # 保存私钥
-    # producer.load_to_file() # 读取私钥，构建地址
-    # TODO base58;私钥，公钥，地址的编码
-    # 私钥编码;base58算法错了;看下那个仓库的base58
 
     # 商品发布（上链）
-    # 生产商（者）发布商品；传入ENA码，签名，直接发布？
-    # 发布可以直接发布，但接受时是要验证的，比如验证是否有这个企业，这个企业是否可以生产发布等等
-    # 为什么不在上链的时候做验证？这需要第三方的参与，未来更新
+    # 生产商（者）发布商品；传入ENA码，签名
     idworker = IdWorker(69012345678912) # ENA码的绑定待优化
     ids = idworker.get_ids(10) # 生成10个商品id
 
@@ -86,7 +81,6 @@ def main():
     # 发布区块
     # 发布前先创建区块
     block = Block(findgen.blocks.get('L'))
-    # TODO 区块生成的Merkel补充
     print('生成记录...')
     print(mine_records)
     print('\n')
@@ -100,24 +94,19 @@ def main():
     # 而区块链，就要有同步，验证，创建的功能
     # 创建区块链后（也就是生成创世区块或网络同步）后，才能生成区块与发布区块
     # 所以生成区块链，放在一开始
-    
-    # 在这里，有另一个问题，那就是惩罚机制；与之对应的是奖励机制；这里要么和比特币一样，用虚拟货币，要么，先不管了，之后再考虑吧
 
     # 交易，发布也没有特别严格的验证；
     # 有地址后，直接发给地址，然后发布就行
-    # normal_record = records.new_record(ids[0],'0x0fff') # 将生成的0号商品，发给被交易方
-    # 问题；验证，不能发给自己，还有检索之前的记录验证是否违背流通规则
-    # 其他验证，签名验证等
     middle_p = Participant()
     middle_p.new_keypair()
     middle_p.get_adress()
-    # 检索之前的区块，找出所有的交易，商品ID，交易hash
+    # 检索之前的区块，找出所有的交易，商品ID，交易hash；urc
     urc = findgen.find_urc()
     print('\n')
     print('检索出的所有urc：')
     print(urc)
     print('\n')
-    tran_id = '0x73b56e03ec430596c40009'
+    tran_id = '0x73b56e03ec430596c40009' # 需要交易的商品
     normal_record = records.new_record(tran_id,'0x0fff',middle_p.address,urc[tran_id]) # 使用records是因为，由生产者进行交易，发给被交易方
     mine_records.append(normal_record)
     normal_block = Block(findgen.blocks.get('L')).new_block(mine_records)
@@ -131,21 +120,8 @@ def main():
 
     # 接受与发布，这里没有写的太详细，是因为想待网络模块完成后，进一步编写。
 
-    # 查找区块，显示商品ID的交易记录
-
     # 结束
-
-    # TODO 最后的任务
-    # 一。区块链的创建
-        # init_blockchain
-    # 二。区块的创建
-        # Merkel
-    # 三。普通流通记录的创建
-        # 简单的验证（放弃，之后统一做）
-        # 检索区块
-    # （区块的发布，网络模块）
-    # 文档的编写
-    
+    # 以上，验证模块，均未实装，注意！
 
 if __name__ == "__main__":
     main()

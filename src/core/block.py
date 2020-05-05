@@ -16,7 +16,6 @@ import json
 from consensus.pow import ProofOfWork
 from gfw import records
 from core.blockchain import BlockChain
-# from core.transactions.transaction import Transaction 记录，记录生成程序
 
 
 version = '0x0' #区块版本号
@@ -79,7 +78,4 @@ class Block(BlockChain):
 
 def new_genesis_block(coinbase):
    pass
-# 币基交易（coinbase）的存在必要性
-
-# TODO merkle树根
-# 简单的验证
+# TODO 币基交易（coinbase）的存在必要性

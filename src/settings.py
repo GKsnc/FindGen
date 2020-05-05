@@ -10,5 +10,5 @@
 """
 
 
-maxNonce = 1 << 63 - 1
-targetBits = 1
+maxNonce = 1 << 63 - 1 # 最大nonce
+targetBits = 2 # 目标，多少个0

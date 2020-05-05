@@ -28,7 +28,7 @@ class BlockChain(object):
         # self.blocks = []
 
         # self.blocks = Redis()
-        # self.current_hash = self.blocks.get('L') # TODO 当前hash
+        # self.current_hash = self.blocks.get('L')
         self.__initial_blockchain()
 
     def __initial_blockchain(self):
