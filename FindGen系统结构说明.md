@@ -146,6 +146,8 @@ GFW位于接口层，底层是区块链，GFW调用区块链所提供的功能�
 
 待构建
 
+## 其他
+
 ### 未来更新  
 
 * 为了方便安装，将程序打包docker（两种安装方式，docker待了解）并使用web访问的模式（B/S）
@@ -155,3 +157,13 @@ GFW位于接口层，底层是区块链，GFW调用区块链所提供的功能�
 * ENA13商品ID生成，优化与添加验证模块
 * 类结构调整；（Records类与Participants类；blockchain类与redis类等，方法权限管理）
 * 验证模块统一；上链，发布区块，接收区块，发布记录，接受记录等
+
+### 程序运行样图
+
+测试程序位于，仓库源码的[测试模块](https://gitee.com/nksnc/FindGen/tree/master/src/test)。
+
+![测试程序运行图](https://images.gitee.com/uploads/images/2020/0505/210426_1ea013d3_5446993.jpeg "测试程序运行结果图.jpg")
+
+![测试程序运行图·续](https://images.gitee.com/uploads/images/2020/0505/210445_71ee2431_5446993.jpeg "测试程序运行结果图·续.jpg")
+
+![生成的区块图](https://images.gitee.com/uploads/images/2020/0505/210509_61fa6fea_5446993.jpeg "区块图.jpg")
