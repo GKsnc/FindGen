@@ -15,6 +15,7 @@
 import redis
 import json
 
+
 class Redis(object):
     # 设置连接属性
     host = 'localhost'
