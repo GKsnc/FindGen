@@ -55,22 +55,22 @@ class Records(object):
             record['crec']=crec
             record['version']=self.version
             record['pub_key']=self.pub_key
-            record['recid']=hashlib.sha256(self.serialize(record).encode()).hexdigest() # hash记录，成为交易标识
+            record['crec']['recid']=hashlib.sha256(self.serialize(record).encode()).hexdigest() # hash记录，成为交易标识
             record['sign']=self.sign(self.priv_key,record)
             return json.dumps(record)
         
         # 交易记录
         crec = dict()
         crec['goods_id'] = id
-        crec['seq'] = precord[-1]['crec']['seq']+1
+        crec['seq'] = precord[-1]['seq']+1
         crec['circulate_flag'] = circulate_flag
         crec['time'] = int(time.time())
         crec['address'] = adress
         record['crec'] = crec
         record['version'] = self.version
         record['pub_key'] = self.pub_key
-        record['recid'] = precord[-1]['recid']
-        record['sign'] = self.sign(self.pri_key,record)
+        record['crec']['recid'] = precord[-1]['recid']
+        record['sign'] = self.sign(self.priv_key,record)
         
         return json.dumps(record) 
 

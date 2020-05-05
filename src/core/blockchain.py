@@ -114,7 +114,7 @@ class BlockChain(object):
     def find_urc(self):
         """
         查找所有的未完成的记录（urc）。
-        :return urc:类json格式
+        :return urc:返回包含所有商品ID的字典。
         """
         urc=dict()
         finished_urc=dict()

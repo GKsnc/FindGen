@@ -76,20 +76,23 @@ def main():
     ids = idworker.get_ids(10) # 生成10个商品id
 
     records = Records(producer.priv_key,producer.pub_key) # 实例化
+    
     for i in ids:
         pro_record = records.new_record(i,'0x000f',producer.address) # 生成记录
         # print(record)
         # 广播（验证）；等等，不用广播，我是生产者，直接发布区块就可以了
-    
-    mine_records = list()
+    mine_records = list() # 收揽记录(收揽广播的记录)
     mine_records.append(pro_record)
     # 发布区块
     # 发布前先创建区块
-    block = Block(findgen.current_hash)
+    block = Block(findgen.blocks.get('L'))
     # TODO 区块生成的Merkel补充
+    print('生成记录...')
     print(mine_records)
-    print(type(pro_record))
+    print('\n')
+
     producer_block = block.new_block(mine_records) # 生成新的区块，传入的是多条记录，并生成merkel树；待完成
+    print('挖出的区块为：')
     print(producer_block)
     findgen.add_block(producer_block[0],producer_block[1])
     # 区块，区块链，这是不能分开看的；
@@ -110,8 +113,17 @@ def main():
     middle_p.get_adress()
     # 检索之前的区块，找出所有的交易，商品ID，交易hash
     urc = findgen.find_urc()
+    print('\n')
+    print('检索出的所有urc：')
     print(urc)
-    #normal_record = records.new_record(ids[0],'0x0fff',middle_p.address)
+    print('\n')
+    tran_id = '0x73b56e03ec430596c40009'
+    normal_record = records.new_record(tran_id,'0x0fff',middle_p.address,urc[tran_id]) # 使用records是因为，由生产者进行交易，发给被交易方
+    mine_records.append(normal_record)
+    normal_block = Block(findgen.blocks.get('L')).new_block(mine_records)
+    print('挖出的区块为：')
+    print(normal_block)
+    findgen.add_block(normal_block[0],normal_block[1])
 
     # 收揽的记录，形成区块，发布出去。为了防止，内容有误，自然的先验证，在添加到区块，最后发布出去，
 

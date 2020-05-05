@@ -44,7 +44,7 @@ class MerkleTree(object):
             new_level = []
 
             for j in range(0, len(self.nodes), 2):
-                node = MerkleNode(self.nodes[j], self.nodes[j + 1], b'')
+                node = MerkleNode(self.nodes[j], self.nodes[j + 1], '')
                 node.new_node()
                 new_level.append(node)
             self.nodes = new_level
