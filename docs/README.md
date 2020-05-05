@@ -11,13 +11,17 @@
 >[比特币的私钥，公钥和地址是什么？](https://www.jianshu.com/p/af6328cc693e)  
 >[如何列出一个比特币地址的所有交易？](http://blog.hubwiz.com/2019/04/26/btc-list-addr-tx/)  
 >[区块链](https://www.zhihu.com/topic/19901773/intro)  
+>[精通比特币（第二版）](http://v1.8btc.com/books/834/masterbitcoin2cn/_book/)  
+>[比特币地址：类型和其含义](https://changelly.com/blog/zh-hans/bitcoin-addresses-types-and-meaning/)  
+>[如何列出一个比特币地址的所有交易？](http://blog.hubwiz.com/2019/04/26/btc-list-addr-tx/)  
+>[以太坊私链入门-创世区块](http://www.netkiller.cn/blockchain/ethereum/genesis.json.html)  
+>[比特币的私钥，公钥和地址是什么？](https://www.jianshu.com/p/af6328cc693e)  
+>[Python 风格指南](https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/)  
 
-## 开源库参考
+## 开源仓库参考
 
 >[blockchain-python-tutorial](https://github.com/adilmoujahid/blockchain-python-tutorial)  
 >[py-bitcoin](https://github.com/csunny/py-bitcoin)  
->[bitcoin](https://github.com/bitcoin/bitcoin)
-
-## 废弃  
-
-![数据结构](https://images.gitee.com/uploads/images/2020/0329/164640_a3aebf7e_5446993.png "数据结构.png")
+>[bitcoin](https://github.com/bitcoin/bitcoin)  
+>[base58](https://github.com/keis/base58)  
+>[py-libp2p](https://github.com/libp2p/py-libp2p)  

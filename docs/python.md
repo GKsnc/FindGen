@@ -1,8 +1,10 @@
 # Python模块使用情况
 
-pyhton 3.7.6 64-bit
+环境：  
+Pyhton 3.7.6 64-bit  
+Windows 10
 
-## Python内建模块
+## Python内建模块 （过时）
 
 hashlib  
 time  

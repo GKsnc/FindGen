@@ -1,11 +1,13 @@
 # FindGen
 
-一个初学者的区块链项目
+一个初学者的区块链项目  
+
+仓库地址 : <https://gitee.com/nksnc/FindGen>
 
 ## 区块链项目——溯源链
 
 [FindGen系统说明](https://gitee.com/nksnc/FindGen/blob/master/FindGen%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E.md)  
-[仓库地址](https://gitee.com/nksnc/FindGen)  
+[参考文档](https://gitee.com/nksnc/FindGen/blob/master/docs/README.md)  
 
 ### 安装
 
@@ -36,6 +38,7 @@ pip install -r requirements.txt
 ### 未来更新TODO  
 
 - 为了方便安装，将程序打包docker（两种安装方式）并使用web访问的模式（B/S），目前使用CLI
+- 实装GUI；目前暂未处理
 - 多线程处理
 - 共识算法的更新
 - P2P网络模块
