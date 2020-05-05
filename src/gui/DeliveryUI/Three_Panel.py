@@ -6,9 +6,7 @@ from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
-
 from DeliveryUI.form3 import Ui_Form3
-
 
 class ThreePanel(QWidget, Ui_Form3):
     def __init__(self, parent=None):
