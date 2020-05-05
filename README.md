@@ -2,9 +2,10 @@
 
 一个初学者的区块链项目
 
-## 区块链项目——防伪链
+## 区块链项目——溯源链
 
-[FindGen系统说明](https://gitee.com/nksnc/FindGen/blob/master/FindGen%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E.md)
+[FindGen系统说明](https://gitee.com/nksnc/FindGen/blob/master/FindGen%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E.md)  
+[仓库地址](https://gitee.com/nksnc/FindGen)  
 
 ### 安装
 
