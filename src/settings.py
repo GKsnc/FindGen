@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 """
-# 描述
+pow共识算法相关设置。
 
 @File    :   settings.py
 @Time    :   2020/02/28 14:18:43
@@ -11,4 +11,4 @@
 
 
 maxNonce = 1 << 63 - 1 # 最大nonce
-targetBits = 2 # 目标，多少个0
+targetBits = 4 # 目标（4个0，生成的区块hash首位为0）
