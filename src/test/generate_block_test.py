@@ -63,7 +63,7 @@ def main():
     producer = Participant() # 实例化
     producer.new_keypair() # 生成公私钥对
     producer.get_adress() # 生成地址 # 地址的话，比特币是有加前缀的，为了标识哪一版地址 ；我这里还没弄
-    producer.save_to_file() # 保存私钥
+    # producer.save_to_file() # 保存私钥
 
     # 商品发布（上链）
     # 生产商（者）发布商品；传入ENA码，签名

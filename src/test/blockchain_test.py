@@ -113,9 +113,9 @@ def main():
             block = next(findgen.iterator())
         except:
             break
-        print(block)
+        print(block,end='\n\n')
 
-    findgen.block2json_dump(findgen.blocks.get('L'))
+    # findgen.block2json_dump(findgen.blocks.get('L')) # 将最后一个区块导出到文件（json格式）
 
 if __name__ == "__main__":
     main()
