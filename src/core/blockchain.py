@@ -152,7 +152,6 @@ class BlockChain(object):
         if not self.current_hash:
             self.current_hash = self.blocks.get("L")
         
-
         try:
             last_block = self.blocks.jget(self.current_hash)
         except:

@@ -7,6 +7,7 @@
 ## 区块链项目——溯源链
 
 [FindGen系统说明](https://gitee.com/nksnc/FindGen/blob/master/FindGen%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84%E8%AF%B4%E6%98%8E.md)  
+
 [参考文档](https://gitee.com/nksnc/FindGen/blob/master/docs/README.md)  
 
 ### 安装
@@ -23,10 +24,6 @@ pip install -r requirements.txt
 
 安装redis
 参考：<https://www.redis.com.cn/redis-installation>
-
-### 架构图
-
-![架构图](https://images.gitee.com/uploads/images/2020/0201/144629_2987d444_5446993.jpeg "架构图.jpeg")
 
 ### 数据结构
 

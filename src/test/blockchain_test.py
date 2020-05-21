@@ -102,8 +102,10 @@ def test_1():
     # 第一步找到所有商品的未完成输出（找的话，就直接利用标识了前一个记录的标识来找），第二步，使用商品发布新的区块（验证，一条条向前验证，成功就接受区块
     # 结束
 
+# test_1是之前的测试用例,现在改为只用main这个测试用例
 def main():
     findgen = BlockChain()
+    
     # print(findgen.print_blockchain())
     while True:
         print(findgen.current_hash)
@@ -112,6 +114,7 @@ def main():
         except:
             break
         print(block)
+
     findgen.block2json_dump(findgen.blocks.get('L'))
 
 if __name__ == "__main__":
