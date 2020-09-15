@@ -4,7 +4,7 @@
 '''
 from PyQt5.QtWidgets import QWidget
 
-from DeliveryUI.form1 import Ui_Form1
+from form1 import Ui_Form1
 
 
 class OnePanel(QWidget, Ui_Form1):

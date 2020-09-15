@@ -9,13 +9,13 @@ import datetime
 from PyQt5.Qt import *
 from PyQt5.QtWidgets import QApplication,QMainWindow,QWidget
 from PyQt5 import QtWidgets,QtGui,QtCore
-from DeliveryUI.Login import Ui_Dialog
-from DeliveryUI.Option import Ui_MainWindow
-from DeliveryUI.register import Ui_Dialog_register
-from DeliveryUI.One_Panel import OnePanel
-from DeliveryUI.Three_Panel import ThreePanel
-from DeliveryUI.Two_Panel import TwoPanel
-from DeliveryUI.Four_Panel import FourPanel
+from Login import Ui_Dialog
+from Option import Ui_MainWindow
+from register import Ui_Dialog_register
+from One_Panel import OnePanel
+from Three_Panel import ThreePanel
+from Two_Panel import TwoPanel
+from Four_Panel import FourPanel
 
 from PyQt5.QtCore import pyqtSlot
 import sqlite3

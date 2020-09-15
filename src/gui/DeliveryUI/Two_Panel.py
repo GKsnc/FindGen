@@ -5,7 +5,7 @@
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
-from DeliveryUI.form2 import Ui_Form2
+from form2 import Ui_Form2
 
 
 class TwoPanel(QWidget, Ui_Form2):

@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
-from DeliveryUI.form4 import Ui_Form4
+from form4 import Ui_Form4
 
 
 class FourPanel(QWidget, Ui_Form4):
