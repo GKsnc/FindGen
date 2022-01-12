@@ -1,8 +1,10 @@
+# **2020 停止开发**
+
+原托管于 gitee
+
 # FindGen
 
 一个初学者的区块链项目  
-
-仓库地址 : <https://gitee.com/nksnc/FindGen>
 
 ## 区块链项目——溯源链
 
@@ -14,7 +16,7 @@
 
 克隆仓库：
 ```
-git clone https://gitee.com/nksnc/FindGen.git
+git clone https://github.com/nksnc/FindGen.git
 ```
 
 安装依赖库:
